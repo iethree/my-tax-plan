@@ -1,0 +1,21 @@
+.badge {
+  @apply text-white bg-gray-500 px-2 py-1 rounded-full text-xs font-semibold;
+  &.cyan {
+    @apply bg-cyan-500;
+  }
+  &.yellow {
+    @apply bg-yellow-500;
+  }
+  &.red {
+    @apply bg-red-500;
+  }
+  &.indigo {
+    @apply bg-indigo-500;
+  }
+  &.green {
+    @apply bg-green-500;
+  }
+  &.sky {
+    @apply bg-sky-500;
+  }
+}

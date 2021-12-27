@@ -1,0 +1,17 @@
+name: Lint
+
+on: [push]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install lint-specific dependencies
+        run: npm i --no-save
+      - name: Lint JS
+        run: npm run lint
+
