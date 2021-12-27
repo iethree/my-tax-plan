@@ -1,10 +1,14 @@
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const NavLink = ({ href, children }: { href: string, children: any}) => {
+  const router =  useRouter();
+  const active = router?.pathname === href;
+
   return (
     <Link href={href} as={href}>
-      <a className={`text-lg text-yellow-500 hover:text-yellow-600 mx-3 no-underline`}>
+      <a className={`text-lg text-yellow-500 hover:text-yellow-600 mx-3 ${active ? 'underline' : 'no-underline'}`}>
         {children}
       </a>
     </Link>
