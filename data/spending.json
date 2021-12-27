@@ -6,14 +6,11 @@
     "child": "",
     "child_plain": "",
     "fiscal_year": "2021",
-    "federal_spending": 1648840000000,
+    "federal_spending": "1648840000000",
     "percent_total": "24.18",
     "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
-    "spending_source_url_name": "Monthly Treasury Statement"
-  },
-  {
-    "parent": "Other",
-    "federal_spending": 1434385554369
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 1648840000000
   },
   {
     "function": "category",
@@ -22,10 +19,15 @@
     "child": "",
     "child_plain": "",
     "fiscal_year": "2021",
-    "federal_spending": 1134590000000,
+    "federal_spending": "1134590000000",
     "percent_total": "16.64",
     "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
-    "spending_source_url_name": "Monthly Treasury Statement"
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 1134590000000
+  },
+  {
+    "parent_plain": "Other",
+    "value": 833645554369
   },
   {
     "function": "category",
@@ -34,10 +36,11 @@
     "child": "",
     "child_plain": "",
     "fiscal_year": "2021",
-    "federal_spending": 796762000000,
+    "federal_spending": "796762000000",
     "percent_total": "11.69",
     "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
-    "spending_source_url_name": "Monthly Treasury Statement"
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 796762000000
   },
   {
     "function": "category",
@@ -46,10 +49,11 @@
     "child": "",
     "child_plain": "",
     "fiscal_year": "2021",
-    "federal_spending": 754849000000,
+    "federal_spending": "754849000000",
     "percent_total": "11.07",
     "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
-    "spending_source_url_name": "Monthly Treasury Statement"
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 754849000000
   },
   {
     "function": "category",
@@ -58,10 +62,11 @@
     "child": "",
     "child_plain": "",
     "fiscal_year": "2021",
-    "federal_spending": 696461000000,
+    "federal_spending": "696461000000",
     "percent_total": "10.21",
     "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
-    "spending_source_url_name": "Monthly Treasury Statement"
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 696461000000
   },
   {
     "function": "category",
@@ -70,9 +75,36 @@
     "child": "",
     "child_plain": "",
     "fiscal_year": "2021",
-    "federal_spending": 352264000000,
+    "federal_spending": "352264000000",
     "percent_total": "5.17",
     "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
-    "spending_source_url_name": "Monthly Treasury Statement"
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 352264000000
+  },
+  {
+    "function": "category",
+    "parent": "Commerce and Housing Credit",
+    "parent_plain": "Commerce and Housing Credit",
+    "child": "",
+    "child_plain": "",
+    "fiscal_year": "2021",
+    "federal_spending": "304147000000",
+    "percent_total": "4.46",
+    "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 304147000000
+  },
+  {
+    "function": "category",
+    "parent": "Education, Training, Employment, and Social Services",
+    "parent_plain": "Education, Training, Employment, and Social Services",
+    "child": "",
+    "child_plain": "",
+    "fiscal_year": "2021",
+    "federal_spending": "296593000000",
+    "percent_total": "4.35",
+    "spending_source_url": "https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/summary-of-receipts-outlays-and-the-deficit-surplus-of-the-u-s-government",
+    "spending_source_url_name": "Monthly Treasury Statement",
+    "value": 296593000000
   }
 ]

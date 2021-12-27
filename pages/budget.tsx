@@ -1,60 +1,65 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { PieChart, Pie, Cell} from 'recharts';
+import revenue from '@/data/revenue.json';
 import spending from '@/data/spending.json';
-import colors from 'tailwindcss/colors';
 
-const Budget: NextPage = () => {
+import MoneyPie from '@/components/MoneyPie';
+
+const Spending: NextPage = () => {
   return (
     <div className="flex flex-col justify-around">
-      <Head>
-        <title>My Tax Plan | Budget</title>
-      </Head>
-      <main className="p-3 max-w-xl mx-auto text-center">
-        <h2 className="text-yellow-500">Budget</h2>
-        <p>
-          If you find yourself wondering what all this tax money goes to fund, you can see a high-level overview here:
-        </p>
-        <BudgetPie data={spending} />
-        <p>
-          Source: <a href="https://datalab.usaspending.gov/americas-finance-guide/spending/categories/">USASpending.gov</a>
-        </p>
-      </main>
+      <div>
+        <Head>
+          <title>My Tax Plan | Federal budget</title>
+        </Head>
+        <div className="p-3 mx-auto text-center max-w-4xl">
+          <div className="text-left max-w-lg mx-auto">
+            The current federal budget is the starting point for this project. Just like in any budget, the long-term goal is to take in at least as much money as you spend.
+          </div>
+          <div className="block md:flex items-center md:text-left">
+            <div>
+              <h2 className="text-yellow-500">Federal Spending</h2>
+              <h6 className="-mt-3">
+                Why collect all this tax money?
+              </h6>
+            </div>
+            <MoneyPie data={spending} />
+          </div>
+          <div className="block md:flex items-center md:text-left">
+            <div>
+              <h2 className="text-yellow-500">Federal Revenue</h2>
+              <h6 className="-mt-3">
+                How does the government get its money?
+              </h6>
+            </div>
+            <MoneyPie data={revenue} />
+          </div>
+          <div className="text-left max-w-lg mx-auto">
+            <p>
+              In many ways, 2020 and 2021 have been outliers for the federal budget due to the enormous amount of economic stimulus paid to companies and invididuals.
+            </p>
+            <p>
+              The White house <a href="https://www.whitehouse.gov/wp-content/uploads/2021/05/budget_fy22.pdf">estimates</a> that in 2022, federal expenditures will total <span className="text-yellow-500">$5.7 Trillion</span>, and receipts will total <span className="text-yellow-500">$4 Trillion</span>. Leaving a deficit of <span className="text-yellow-500">$1.7 Trillion</span> for 2022. As the country's economic recovery continues, the deficit is projected to decrease to a mere <span className="text-yellow-500">$1 Trillion</span> by 2024.
+            </p>
+            <p>
+              While <a href="https://www.brookings.edu/policy2020/votervital/how-worried-should-you-be-about-the-federal-deficit-and-debt/">economists</a> and <a href="https://www.foxbusiness.com/economy/us-federal-budget-deficit-2-8t-second-largest">politicians</a> disagree widely on when and why the government should finance itself with debt, everyone agrees that a government cannot remain financially stable while continuing to run deficits indefinitely.
+            </p>
+          </div>
+          <div>
+            Sources:
+            <a
+              href="https://datalab.usaspending.gov/americas-finance-guide/revenue/categories/"
+              className="mx-3">Revenue</a>
+            <a href="https://datalab.usaspending.gov/americas-finance-guide/spending/categories/">Spending</a>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
 
+export default Spending
 
-function BudgetPie({ data }: { data: Array<object> }) {
-  const graphColors = [
-    colors.blue[500],
-    colors.green[500],
-    colors.yellow[500],
-    colors.orange[500],
-    colors.red[500],
-    colors.cyan[500],
-    colors.purple[500],
-    colors.pink[500],
-  ];
 
-  return (
-    <PieChart height={400} width={1000}>
-      <Pie
-        data={data}
-        dataKey="federal_spending"
-        nameKey="parent"
-        cx={200}
-        cy={200}
-        outerRadius={80}
-        label={({ percent, name }) => `${name} - ${Math.round(percent * 100)}%`}
-      >
-        {
-          data.map((entry, index) => (
-            <Cell key={index} fill={graphColors[index] || colors.indigo[500]} />
-          ))
-        }
-      </Pie>
-    </PieChart>
-  );
-}
-export default Budget
+

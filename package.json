@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "parse:budget": "node ./data/parse-budget.js"
+    "parse:spending": "node ./data/parse-spending.js",
+    "parse:revenue": "node ./data/parse-revenue.js"
   },
   "dependencies": {
     "next": "12.0.7",

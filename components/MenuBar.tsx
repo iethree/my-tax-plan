@@ -17,7 +17,7 @@ const NavLink = ({ href, children }: { href: string, children: any}) => {
 
 const NavBar: NextPage = () => {
   return (
-    <nav className="fixed top-0 left-0 w-screen bg-indigo-900 px-4 py-2 shadow-sm flex justify-between items-center">
+    <nav className="fixed top-0 left-0 w-screen bg-indigo-900 px-4 py-2 shadow-sm flex justify-between items-center z-50">
       <Link href="/">
         <a className="text-xl no-underline">
           <i className="fas fa-coins mr-2 text-yellow-500" />
@@ -27,6 +27,9 @@ const NavBar: NextPage = () => {
       <div className="flex justify-end">
         <NavLink href="/build">
           Builder
+        </NavLink>
+        <NavLink href="/budget">
+          Budget
         </NavLink>
         <NavLink href="/about">
           About
