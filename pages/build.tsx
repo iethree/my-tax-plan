@@ -3,7 +3,7 @@ import Head from 'next/head'
 
 const Builder: NextPage = () => {
   return (
-    <div className="flex flex-col justify-around mt-10">
+    <div className="flex flex-col justify-around">
       <Head>
         <title>My Tax Plan | Builder</title>
       </Head>

@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const Why: NextPage = () => {
   return (
-    <div className="h-screen flex flex-col justify-around">
+    <div className="flex flex-col justify-around">
       <Head>
         <title>My Tax Plan | Why?</title>
       </Head>

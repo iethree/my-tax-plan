@@ -15,7 +15,6 @@ const NavLink = ({ href, children }: { href: string, children: any}) => {
   );
 };
 
-
 const NavBar: NextPage = () => {
   return (
     <nav className="fixed top-0 left-0 w-screen bg-indigo-900 px-4 py-2 shadow-sm flex justify-between items-center">

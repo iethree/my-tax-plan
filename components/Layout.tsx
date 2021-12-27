@@ -4,7 +4,9 @@ export default function Layout({ children }: { children: any }) {
   return (
     <>
       <MenuBar />
-      <main>{children}</main>
+      <main className="mt-10">
+        {children}
+      </main>
     </>
   )
 }
