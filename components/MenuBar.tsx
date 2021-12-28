@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -16,6 +17,8 @@ const NavLink = ({ href, children }: { href: string, children: any}) => {
 };
 
 const NavBar: NextPage = () => {
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
   return (
     <nav className="fixed top-0 left-0 w-screen bg-indigo-900 px-4 py-2 shadow-sm flex justify-between items-center z-50">
       <Link href="/">
@@ -24,19 +27,45 @@ const NavBar: NextPage = () => {
           My Tax Plan
         </a>
       </Link>
-      <div className="flex justify-end">
-        <NavLink href="/build">
-          Builder
-        </NavLink>
-        <NavLink href="/budget">
-          Budget
-        </NavLink>
-        <NavLink href="/about">
-          About
-        </NavLink>
+      <div className="justify-end">
+        <div className="hidden md:flex">
+          <NavLinks />
+        </div>
+
+        <button
+          className="block md:hidden text-yellow-500 hover:text-yellow-600"
+          onClick={() => setShowMobileMenu(show => !show)}
+        >
+          <i className="fas fa-bars mr-2 fa-xl" />
+        </button>
+
       </div>
+      {showMobileMenu && (
+        <div
+          onClick={() => setShowMobileMenu(false)}
+          className="fixed top-0 right-0 mt-10 p-5 bg-indigo-900 flex flex-col h-48 justify-between items-center z-40 rounded-b-lg shadow-lg"
+        >
+          <NavLinks />
+        </div>
+      )}
     </nav>
   )
+}
+
+function NavLinks() {
+  return (
+    <>
+      <NavLink href="/build">
+        Builder
+      </NavLink>
+      <NavLink href="/budget">
+        Budget
+      </NavLink>
+      <NavLink href="/about">
+        About
+      </NavLink>
+    </>
+  );
 }
 
 export default NavBar
