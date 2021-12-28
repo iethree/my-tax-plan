@@ -1,5 +1,4 @@
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
-import { Payload } from 'recharts/types/component/DefaultLegendContent';
 import colors from 'tailwindcss/colors';
 
 export default function MoneyPie({ data }: { data: Array<object> }) {
@@ -20,7 +19,7 @@ export default function MoneyPie({ data }: { data: Array<object> }) {
       <PieChart className="mx-auto">
         <text x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".5em">
           ${Math.round(data.reduce(
-            (acc: number, cur: any) => (acc + cur[0]?.value), 0) / 100000000000) / 10
+            (acc: number, cur: any) => (acc + cur?.value), 0) / 100000000000) / 10
           }
           {' '} Trillion
         </text>
