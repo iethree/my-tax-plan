@@ -7,9 +7,11 @@
     "start": "next start",
     "lint": "next lint",
     "parse:spending": "node ./data/parse-spending.js",
-    "parse:revenue": "node ./data/parse-revenue.js"
+    "parse:revenue": "node ./data/parse-revenue.js",
+    "parse:income": "node ./data/parse-income.js"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "next": "12.0.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@types/node": "17.0.1",
+    "@types/papaparse": "^5.3.1",
     "@types/react": "17.0.37",
     "@types/tailwindcss": "^2.2.4",
     "autoprefixer": "^10.4.0",
