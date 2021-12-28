@@ -1,4 +1,5 @@
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
+import { Payload } from 'recharts/types/component/DefaultLegendContent';
 import colors from 'tailwindcss/colors';
 
 export default function MoneyPie({ data }: { data: Array<object> }) {
@@ -18,7 +19,9 @@ export default function MoneyPie({ data }: { data: Array<object> }) {
     <ResponsiveContainer width="100%" height={300}>
       <PieChart className="mx-auto">
         <text x="50%" y="50%" textAnchor="middle" fill="#fff" dy=".5em">
-          ${Math.round(data.reduce((acc, cur) => acc + cur?.value, 0) / 100000000000) / 10}
+          ${Math.round(data.reduce(
+            (acc: number, cur: any) => (acc + cur[0]?.value), 0) / 100000000000) / 10
+          }
           {' '} Trillion
         </text>
         <Pie
@@ -40,17 +43,30 @@ export default function MoneyPie({ data }: { data: Array<object> }) {
             ))
           }
         </Pie>
-        <Tooltip content={PieTooltip} />
+        <Tooltip
+          content={({ active, payload, label }) => (
+            <PieTooltip active={active} payload={payload} label={label} />
+          )}
+        />
       </PieChart>
     </ResponsiveContainer>
   );
 }
 
-function PieTooltip({ active, payload, label}: { active: boolean, payload: Array<object>, label: string }) {
-  const amount = Math.round(payload[0]?.value / 1000000000);
+function PieTooltip(
+  { active, payload, label}:
+  {
+    active: boolean | undefined,
+    payload: any,
+    label: string,
+  }
+) {
+  const amount: number = Math.round((payload?.[0]?.value || 0) / 1000000000);
+  const name: string = payload?.[0]?.name || '';
+
   return (
     <span className="bg-white bg-opacity-75 text-black p-2 rounded-lg">
-      {payload[0]?.name} - ${active ? amount : label} B
+      {name} - ${active ? amount : label} B
     </span>
   );
 }
