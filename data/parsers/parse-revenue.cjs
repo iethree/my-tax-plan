@@ -1,6 +1,6 @@
 const papa = require('papaparse');
 const fs = require('fs');
-const revenueCSV = fs.readFileSync(__dirname + '/federal_revenue_categories.csv', 'utf8');
+const revenueCSV = fs.readFileSync(__dirname + '/../raw/federal_revenue_categories.csv', 'utf8');
 
 const revenueJSON = papa.parse(revenueCSV, { header: true, ignoreBlankLines: true  }).data;
 
@@ -22,4 +22,6 @@ const categories = revenueJSON
   }, [{ parent_plain: 'Other', value: 0 }])
   .sort((a, b) => b.value - a.value)
 
-fs.writeFileSync(__dirname + '/revenue.json', JSON.stringify(categories, null, 2));
+  const fileName = __dirname + '/../revenue.json';
+  fs.writeFileSync(fileName, JSON.stringify(categories, null, 2));
+  console.log(`✅ wrote: ${fileName}`);
