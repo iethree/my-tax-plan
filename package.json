@@ -1,17 +1,16 @@
 {
   "name": "my-tax-plan",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "ts-mocha",
-    "parse:spending": "node ./data/parsers/parse-spending.*",
-    "parse:revenue": "node ./data/parsers/parse-revenue.*",
-    "parse:income": "node ./data/parsers/parse-income.*",
-    "parse:rates": "node ./data/parsers/parse-rates.*",
+    "parse:spending": "node --loader ts-node/esm ./data/parsers/parse-spending.*",
+    "parse:revenue": "node --loader ts-node/esm ./data/parsers/parse-revenue.*",
+    "parse:income": "node --loader ts-node/esm ./data/parsers/parse-income.*",
+    "parse:rates": "node --loader ts-node/esm ./data/parsers/parse-rates.*",
     "parse:all": "npm run parse:spending && npm run parse:revenue && npm run parse:income && npm run parse:rates"
   },
   "dependencies": {

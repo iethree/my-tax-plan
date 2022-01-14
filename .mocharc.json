@@ -4,5 +4,6 @@
 		"experimental-specifier-resolution=node",
 		"loader=ts-node/esm"
 	],
-  "spec": ["**/*.test.ts"]
+  "spec": ["**/*.test.*"],
+	"ignore": ["node_modules/**"]
 }
