@@ -1,0 +1,17 @@
+name: Unit Tests
+
+on: [push]
+
+jobs:
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm i --no-save
+      - name: Run unit tests
+        run: npm test
+
