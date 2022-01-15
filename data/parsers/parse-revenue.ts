@@ -1,12 +1,24 @@
-const papa = require('papaparse');
-const fs = require('fs');
-const revenueCSV = fs.readFileSync(__dirname + '/../raw/federal_revenue_categories.csv', 'utf8');
+import papa from 'papaparse';
+import fs from 'fs';
+import { RevenueCategory } from '@/types/budgetTypes';
 
-const revenueJSON = papa.parse(revenueCSV, { header: true, ignoreBlankLines: true  }).data;
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const revenueCSV: any = fs.readFileSync(__dirname + '/../raw/federal_revenue_categories.csv', 'utf8');
+
+const revenueJson: RevenueCategory[] = papa.parse(revenueCSV, {
+  header: true,
+  // @ts-ignore
+  ignoreBlankLines: true,
+  dynamicTyping: true,
+  // @ts-ignore
+}).data;
 
 // filter to only include the top level categories
 // combine lesser categories
-const categories = revenueJSON
+const categories = revenueJson
   .filter(({ child }) => !child )
   .map((data) => ({
     ...data,
@@ -20,7 +32,7 @@ const categories = revenueJSON
     }
     return acc;
   }, [{ parent_plain: 'Other', value: 0 }])
-  .sort((a, b) => b.value - a.value)
+  .sort((a: RevenueCategory, b: RevenueCategory) => b.value - a.value)
 
   const fileName = __dirname + '/../revenue.json';
   fs.writeFileSync(fileName, JSON.stringify(categories, null, 2));

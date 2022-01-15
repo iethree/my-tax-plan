@@ -1,14 +1,28 @@
-const papa = require('papaparse');
-const fs = require('fs');
-const spendingCSV = fs.readFileSync(__dirname + '/../raw/federal_spending_categories.csv', 'utf8');
+import papa from 'papaparse';
+import fs from 'fs';
+import { SpendingCategory} from '@/types/budgetTypes';
 
-const spendingJSON = papa.parse(spendingCSV, { header: true, ignoreBlankLines: true }).data;
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+
+
+const spendingCSV: any = fs.readFileSync(__dirname + '/../raw/federal_spending_categories.csv', 'utf8');
+
+const spendingJSON: SpendingCategory[] = papa.parse(spendingCSV, {
+  header: true,
+  // @ts-ignore
+  ignoreBlankLines: true,
+  dynamicTyping: true,
+  // @ts-ignore
+}).data;
 
 // filter to only include the top level categories
 // combine lesser categories
-const categories = spendingJSON
+const categories: SpendingCategory[] = spendingJSON
   .filter(({ function: f, child }) => (f === 'category' && !child) )
-  .map((data) => ({
+  .map((data: SpendingCategory) => ({
     ...data,
     value: Number(data.federal_spending),
   }))
