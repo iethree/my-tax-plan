@@ -25,7 +25,7 @@ const filingStatus: string[] = [
  */
 export function calculateTax(taxable: number, rates: TaxRate[]): number {
 
-  if (taxable < 1) return 0;
+  if (taxable < 1 || !rates.length) return 0;
 
   let tax: number = 0;
   let cnt: number = 0;
@@ -38,7 +38,7 @@ export function calculateTax(taxable: number, rates: TaxRate[]): number {
       break;
     }
     cnt++;
-  } while (taxable > rates[cnt].min);
+  } while (rates[cnt] && taxable > rates[cnt].min);
 
   return tax;
 }
@@ -98,10 +98,22 @@ export function calculateAllBracketsRevenue(rates: TaxScheme): number {
   return totalRevenue;
 }
 
+function filterIncomesOver(rates: TaxRate[], maxIncome: number) {
+  return rates.filter(bracket => bracket.max <= maxIncome)
+};
 
+export function calculateTaxRevenue(rates: TaxScheme, maxIncome: number = 10000000000): number {
+  const partialScheme: TaxScheme = {
+    income: {
+      single: filterIncomesOver(rates.income.single, maxIncome),
+      marriedFilingJointly: filterIncomesOver(rates.income.marriedFilingJointly, maxIncome),
+      marriedFilingSeparately: filterIncomesOver(rates.income.marriedFilingSeparately, maxIncome),
+      headOfHousehold: filterIncomesOver(rates.income.headOfHousehold, maxIncome),
+    },
+    gains: rates.gains,
+  };
 
-export function calculateTaxRevenue(rates: TaxScheme): number {
   return (
-    calculateAllBracketsRevenue(rates)
+    calculateAllBracketsRevenue(partialScheme)
   );
 }

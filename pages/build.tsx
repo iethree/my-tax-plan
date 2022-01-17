@@ -1,5 +1,6 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import RateChart from '@/components/RateChart';
 
 const Builder: NextPage = () => {
   return (
@@ -7,9 +8,9 @@ const Builder: NextPage = () => {
       <Head>
         <title>My Tax Plan | Builder</title>
       </Head>
-      <main className="p-3 max-w-xl mx-auto text-center">
+      <main className="p-3 mx-auto text-center block">
         <h2 className="text-yellow-500">Builder</h2>
-        <div className="badge indigo inline-block mt-20">coming soon</div>
+        <RateChart />
       </main>
     </div>
   );
