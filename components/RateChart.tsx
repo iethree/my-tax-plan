@@ -101,8 +101,8 @@ export default function BracketChart() {
           />
         </YAxis>
         <XAxis
-          dataKey="max"
-          tickFormatter={(value: number) => `< ${formatBigMoney(value)}`}
+          dataKey="min"
+          tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
         >
           <Label
             value="Income"
@@ -113,7 +113,7 @@ export default function BracketChart() {
         <Tooltip
           formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
           labelStyle={ { color: colors.black } }
-          labelFormatter={(value: number) => `income below ${formatBigMoney(value)}`}
+          labelFormatter={(value: number) => `income above ${formatBigMoney(value)}`}
         />
         <Area
           type="natural"
