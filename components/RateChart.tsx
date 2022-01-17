@@ -45,22 +45,32 @@ export default function BracketChart() {
     let startYPos: number | null = null;
 
     const mouseMove = (mouseEvent: any) => {
+      console.log({ mouseEvent });
 
+      const currentPos = mouseEvent.clientY || mouseEvent.touches[0].clientY;
       if (startYPos === null) {
-        startYPos = mouseEvent.clientY;
+        startYPos = currentPos;
         return;
       }
-      const moveDistance = startYPos - mouseEvent.clientY;
+      const moveDistance = startYPos - currentPos;
       const moveAmount = Math.round(moveDistance / 2) * .01;
 
       adjust(rateIndex, moveAmount);
 
-      startYPos = mouseEvent.clientY;
+      startYPos = currentPos;
     }
 
     document.addEventListener('mousemove', mouseMove);
+    document.addEventListener('touchmove', mouseMove);
+
     document.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', mouseMove);
+      document.removeEventListener('touchmove', mouseMove);
+    });
+
+    document.addEventListener('touchend', () => {
+      document.removeEventListener('mousemove', mouseMove);
+      document.removeEventListener('touchmove', mouseMove);
     });
   }
 
@@ -70,78 +80,81 @@ export default function BracketChart() {
 
   return (
     <>
-      <ComposedChart data={rates.income.single} width={600}  height={400}>
-        <Legend
-          verticalAlign="top"
-        />
-        <YAxis
-          yAxisId='left'
-          domain={[0,1]}
-          tickFormatter={(value) => `${value * 100}%`}
-        >
-          <Label
-            orientation="left"
-            value="Tax Rate"
-            position="insideLeft"
-            angle={270}
-            fill={colors.white}
+      <ResponsiveContainer height={400}>
+        <ComposedChart data={rates.income.single}>
+          <Legend
+            verticalAlign="top"
           />
-        </YAxis>
-        <YAxis
-          yAxisId="right"
-          orientation="right"
-          domain={[0, 3000000000000]}
-          tickFormatter={(value) => formatBigMoney(value)}
-        >
-          <Label
-            value="Total Revenue"
-            position="insideRight"
-            angle={90}
-            fill={colors.white}
+          <YAxis
+            yAxisId='left'
+            domain={[0,1]}
+            tickFormatter={(value) => `${value * 100}%`}
+          >
+            <Label
+              orientation="left"
+              value="Tax Rate"
+              position="insideLeft"
+              angle={270}
+              fill={colors.white}
+            />
+          </YAxis>
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            domain={[0, 3000000000000]}
+            tickFormatter={(value) => formatBigMoney(value)}
+          >
+            <Label
+              value="Total Revenue"
+              position="insideRight"
+              angle={90}
+              fill={colors.white}
+            />
+          </YAxis>
+          <XAxis
+            dataKey="min"
+            tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
+          >
+            <Label
+              value="Income"
+              position="bottom"
+              fill={colors.white}
+            />
+          </XAxis>
+          <Tooltip
+            formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
+            labelStyle={ { color: colors.black } }
+            labelFormatter={(value: number) => `income above ${formatBigMoney(value)}`}
           />
-        </YAxis>
-        <XAxis
-          dataKey="min"
-          tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
-        >
-          <Label
-            value="Income"
-            position="bottom"
-            fill={colors.white}
-          />
-        </XAxis>
-        <Tooltip
-          formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
-          labelStyle={ { color: colors.black } }
-          labelFormatter={(value: number) => `income above ${formatBigMoney(value)}`}
-        />
-        <Area
-          type="natural"
-          yAxisId="right"
-          name="revenue"
-          strokeWidth={3}
-          dataKey={(data) => calculateTaxRevenue(rates, data.max)}
-          stroke={colors.green[600]}
-          fill={colors.green[500]}
-          fillOpacity={0.2}
-          connectNulls={true}
+          <Area
+            type="natural"
+            yAxisId="right"
+            name="revenue"
+            strokeWidth={3}
+            dataKey={(data) => calculateTaxRevenue(rates, data.max)}
+            stroke={colors.green[600]}
+            fill={colors.green[500]}
+            fillOpacity={0.2}
+            connectNulls={true}
 
-        />
-        <Bar
-          dataKey="rate"
-          yAxisId="left"
-          fill={colors.blue[400]}
-          onMouseDown={handleBarDrag}
-          className="cursor-ns-resize"
-        >
-          <LabelList
-            dataKey="rate"
-            position="top"
-            fill={colors.white}
-            formatter={(value: number) => formatters.rate(value)}
           />
-        </Bar>
-      </ComposedChart>
+          <Bar
+            dataKey="rate"
+            yAxisId="left"
+            fill={colors.blue[400]}
+            onMouseDown={handleBarDrag}
+            onTouchStart={handleBarDrag}
+            className="cursor-ns-resize"
+          >
+            <LabelList
+              dataKey="rate"
+              position="top"
+              fill={colors.white}
+              formatter={(value: number) => formatters.rate(value)}
+            />
+          </Bar>
+        </ComposedChart>
+      </ResponsiveContainer>
       <div className="flex justify-between mx-20">
         {rates.income.single.map((rate, index) => (
           <RateChangeWidget
@@ -173,12 +186,12 @@ function RateChangeWidget({ adjust }: { adjust: Function }) {
 function ResultWidget({ revenue, baseline } : { revenue: number, baseline: number }) {
   const change = (revenue - baseline) / baseline;
   return (
-    <div className="bg-green-600 rounded-lg bg-opacity-50 inline-block px-5 py-2">
-      <div className="text-4xl">
+    <div className="bg-green-600 rounded-lg bg-opacity-50 inline-block px-5 py-2 mt-5">
+      <div className="text-2xl md:text-4xl">
         Total Revenue: <strong>{formatBigMoney(revenue)}</strong>
       </div>
       <div className="flex justify-around">
-        <div>
+        <div className="mr-5">
           Goal Revenue: <strong>$3T</strong>
         </div>
         <div>
