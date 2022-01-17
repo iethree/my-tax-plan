@@ -25,26 +25,43 @@ export default function BracketChart() {
   const adjust = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
     Object.keys(newRates.income).forEach((filingStatus) => {
-      newRates.income[filingStatus][bracketIndex].rate += amount;
+      const prevRate = newRates.income[filingStatus][bracketIndex].rate;
+      if (prevRate + amount < 0) {
+        newRates.income[filingStatus][bracketIndex].rate = 0;
+      } else if ( prevRate + amount > 1) {
+        newRates.income[filingStatus][bracketIndex].rate = 1;
+      } else {
+        newRates.income[filingStatus][bracketIndex].rate += amount;
+      }
     });
     setRates(newRates);
   };
 
-  function handleBarDrag(e: any) {
-    const { rate: startingRate } = e.payload;
+
+  function handleBarDrag(chartEvent: any) {
+
+    const { rate: startingRate } = chartEvent.payload;
+    const rateIndex = rates.income.single.findIndex((bracket) => bracket.rate === startingRate);
     let startYPos: number | null = null;
 
-    const mouseMove = (e: any) => {
+    const mouseMove = (mouseEvent: any) => {
+
       if (startYPos === null) {
-        startYPos = e.clientY;
+        startYPos = mouseEvent.clientY;
+        return;
       }
-      console.log('startYpos', startYPos);
-      console.log('ypos', e.clientY);
+      const moveDistance = startYPos - mouseEvent.clientY;
+      const moveAmount = Math.round(moveDistance / 2) * .01;
+
+      adjust(rateIndex, moveAmount);
+
+      startYPos = mouseEvent.clientY;
     }
 
     document.addEventListener('mousemove', mouseMove);
-
-    document.addEventListener('mouseup', () => document.removeEventListener('mousemove', mouseMove))
+    document.addEventListener('mouseup', () => {
+      document.removeEventListener('mousemove', mouseMove);
+    });
   }
 
   useEffect(() => {
@@ -53,7 +70,7 @@ export default function BracketChart() {
 
   return (
     <>
-      <ComposedChart data={rates.income.single} width={600}  height={400} >
+      <ComposedChart data={rates.income.single} width={600}  height={400}>
         <Legend
           verticalAlign="top"
         />
@@ -96,7 +113,7 @@ export default function BracketChart() {
         <Tooltip
           formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
           labelStyle={ { color: colors.black } }
-          labelFormatter={(value: number) => formatBigMoney(value)}
+          labelFormatter={(value: number) => `income below ${formatBigMoney(value)}`}
         />
         <Area
           type="natural"
@@ -108,13 +125,14 @@ export default function BracketChart() {
           fill={colors.green[500]}
           fillOpacity={0.2}
           connectNulls={true}
-        />
 
+        />
         <Bar
           dataKey="rate"
           yAxisId="left"
           fill={colors.blue[400]}
           onMouseDown={handleBarDrag}
+          className="cursor-ns-resize"
         >
           <LabelList
             dataKey="rate"
@@ -123,8 +141,6 @@ export default function BracketChart() {
             formatter={(value: number) => formatters.rate(value)}
           />
         </Bar>
-
-
       </ComposedChart>
       <div className="flex justify-between mx-20">
         {rates.income.single.map((rate, index) => (
@@ -166,7 +182,10 @@ function ResultWidget({ revenue, baseline } : { revenue: number, baseline: numbe
           Goal Revenue: <strong>$3T</strong>
         </div>
         <div>
-          Change: <strong>{formatPercent(change)}</strong>
+          Change: <strong>
+            {change > 0 && '+'}
+            {formatPercent(change)}
+          </strong>
         </div>
       </div>
     </div>
