@@ -7,11 +7,13 @@ import colors from 'tailwindcss/colors';
 import { TaxScheme } from '@/types/taxTypes';
 import { calculateTaxRevenue } from '@/utils/taxCalc';
 
-import defaultRates from '../data/rates.json';
+import jsonRates from '../data/rates.json';
+const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));
 
 const baselineRevenue = calculateTaxRevenue(defaultRates);
 
 import { formatBigMoney, formatPercent } from '@/utils/formatters';
+import Examples from './Examples';
 
 const formatters = {
   revenue: formatBigMoney,
@@ -19,7 +21,7 @@ const formatters = {
 };
 
 export default function BracketChart() {
-  const [rates, setRates]: [TaxScheme, Function] = useState(defaultRates);
+  const [rates, setRates]: [TaxScheme, Function] = useState({ ...defaultRates });
   const [taxRevenue, setTaxRevenue]: [number, Function] = useState(0);
 
   const adjust = (bracketIndex: number, amount: number) => {
@@ -79,104 +81,110 @@ export default function BracketChart() {
   }, [rates]);
 
   return (
-    <>
-      <ResponsiveContainer height={400}>
-        <ComposedChart data={rates.income.single}>
-          <Legend
-            verticalAlign="top"
-          />
-          <YAxis
-            yAxisId='left'
-            domain={[0,1]}
-            tickFormatter={(value) => `${value * 100}%`}
-          >
-            <Label
-              orientation="left"
-              value="Tax Rate"
-              position="insideLeft"
-              angle={270}
-              fill={colors.white}
-            />
-          </YAxis>
-          <YAxis
-            yAxisId="right"
-            orientation="right"
-            domain={[0, 3000000000000]}
-            tickFormatter={(value) => formatBigMoney(value)}
-          >
-            <Label
-              value="Total Revenue"
-              position="insideRight"
-              angle={90}
-              fill={colors.white}
-            />
-          </YAxis>
-          <XAxis
-            dataKey="min"
-            tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
-          >
-            <Label
-              value="Income"
-              position="bottom"
-              fill={colors.white}
-            />
-          </XAxis>
-          <Tooltip
-            formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
-            labelStyle={ { color: colors.black } }
-            labelFormatter={(value: number) => `income above ${formatBigMoney(value)}`}
-          />
-          <Area
-            type="natural"
-            yAxisId="right"
-            name="revenue"
-            strokeWidth={3}
-            dataKey={(data) => calculateTaxRevenue(rates, data.max)}
-            stroke={colors.green[600]}
-            fill={colors.green[500]}
-            fillOpacity={0.2}
-            connectNulls={true}
+    <div className="block md:flex">
+      <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
+        <ResultWidget revenue={taxRevenue} baseline={baselineRevenue} />
 
-          />
-          <Bar
-            dataKey="rate"
-            yAxisId="left"
-            fill={colors.blue[400]}
-            onMouseDown={handleBarDrag}
-            onTouchStart={handleBarDrag}
-            className="cursor-ns-resize"
-          >
-            <LabelList
-              dataKey="rate"
-              position="top"
-              fill={colors.white}
-              formatter={(value: number) => formatters.rate(value)}
+        <ResponsiveContainer height={400}>
+          <ComposedChart data={rates.income.single}>
+            <Legend
+              verticalAlign="top"
             />
-          </Bar>
-        </ComposedChart>
-      </ResponsiveContainer>
-      <div className="flex justify-between mx-20">
-        {rates.income.single.map((rate, index) => (
-          <RateChangeWidget
-            key={rate.max}
-            adjust={((amount: number) => adjust(index, amount))}
-          />
-        ))}
+            <YAxis
+              yAxisId='left'
+              domain={[0,1]}
+              tickFormatter={(value) => `${value * 100}%`}
+            >
+              <Label
+                orientation="left"
+                value="Tax Rate"
+                position="insideLeft"
+                angle={270}
+                fill={colors.white}
+              />
+            </YAxis>
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              domain={[0, 3000000000000]}
+              tickFormatter={(value) => formatBigMoney(value)}
+            >
+              <Label
+                value="Total Revenue"
+                position="insideRight"
+                angle={90}
+                fill={colors.white}
+              />
+            </YAxis>
+            <XAxis
+              dataKey="min"
+              tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
+            >
+              <Label
+                value="Income"
+                position="bottom"
+                fill={colors.white}
+              />
+            </XAxis>
+            <Tooltip
+              formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
+              labelStyle={ { color: colors.black } }
+              labelFormatter={(value: number) => `taxable income above ${formatBigMoney(value)}`}
+            />
+            <Area
+              type="natural"
+              yAxisId="right"
+              name="revenue"
+              strokeWidth={3}
+              dataKey={(data) => calculateTaxRevenue(rates, data.max)}
+              stroke={colors.emerald[600]}
+              fill={colors.emerald[700]}
+              fillOpacity={0.4}
+              connectNulls={true}
+
+            />
+            <Bar
+              dataKey="rate"
+              yAxisId="left"
+              stroke={colors.emerald[800]}
+              fill={colors.emerald[500]}
+              fillOpacity={0.9}
+              onMouseDown={handleBarDrag}
+              onTouchStart={handleBarDrag}
+              className="cursor-ns-resize"
+            >
+              <LabelList
+                dataKey="rate"
+                position="top"
+                fill={colors.white}
+                formatter={(value: number) => formatters.rate(value)}
+              />
+            </Bar>
+          </ComposedChart>
+        </ResponsiveContainer>
+        <div className="flex justify-between mx-auto w-3/4">
+          {rates.income.single.map((rate, index) => (
+            <RateChangeWidget
+              key={rate.max}
+              adjust={((amount: number) => adjust(index, amount))}
+            />
+          ))}
+        </div>
       </div>
-      <ResultWidget revenue={taxRevenue} baseline={baselineRevenue} />
-    </>
+      <div>
+        <Examples scheme={rates} />
+      </div>
+    </div>
   );
 }
 
 function RateChangeWidget({ adjust }: { adjust: Function }) {
-
-
   return (
-    <div className="rounded-md bg-indigo-700 inline-block overflow-hidden mb-2">
-      <button className="block border-b border-indigo-500 hover:bg-indigo-600 px-1" onClick={() => adjust(0.01)}>
+    <div className="rounded-md bg-emerald-600 inline-block overflow-hidden mb-2">
+      <button className="block border-b border-emerald-700 hover:bg-indigo-600 px-1" onClick={() => adjust(0.01)}>
         <i className="fas fa-chevron-up" />
       </button>
-      <button className="block hover:bg-indigo-600 px-1" onClick={() => adjust(-0.01)}>
+      <button className="block hover:bg-emerald-600 px-1" onClick={() => adjust(-0.01)}>
         <i className="fas fa-chevron-down" />
       </button>
     </div>
@@ -186,20 +194,14 @@ function RateChangeWidget({ adjust }: { adjust: Function }) {
 function ResultWidget({ revenue, baseline } : { revenue: number, baseline: number }) {
   const change = (revenue - baseline) / baseline;
   return (
-    <div className="bg-green-600 rounded-lg bg-opacity-50 inline-block px-5 py-2 mt-5">
+    <div className="bg-indigo-600 rounded-lg px-5 py-2 mt-5 flex w-64 mx-auto items-center justify-around">
       <div className="text-2xl md:text-4xl">
-        Total Revenue: <strong>{formatBigMoney(revenue)}</strong>
+        <div className="font-bold text-4xl">{formatBigMoney(revenue)}</div>
+        <div className="uppercase text-sm text-indigo-300">Total Revenue</div>
       </div>
-      <div className="flex justify-around">
-        <div className="mr-5">
-          Goal Revenue: <strong>$3T</strong>
-        </div>
-        <div>
-          Change: <strong>
-            {change > 0 && '+'}
-            {formatPercent(change)}
-          </strong>
-        </div>
+      <div className="text-2xl text-indigo-300">
+        {change > 0 && '+'}
+        {formatPercent(change)}
       </div>
     </div>
   );
