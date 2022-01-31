@@ -81,11 +81,11 @@ export default function BracketChart() {
   }, [rates]);
 
   return (
-    <div className="block md:flex">
-      <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4">
+    <div className="block md:flex max-h-full">
+      <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4 md:max-h-[calc(100vh-350px)]">
         <ResultWidget revenue={taxRevenue} baseline={baselineRevenue} />
 
-        <ResponsiveContainer height={400}>
+        <ResponsiveContainer height="100%">
           <ComposedChart data={rates.income.single}>
             <Legend
               verticalAlign="top"
@@ -181,10 +181,10 @@ export default function BracketChart() {
 function RateChangeWidget({ adjust }: { adjust: Function }) {
   return (
     <div className="rounded-md bg-emerald-600 inline-block overflow-hidden mb-2">
-      <button className="block border-b border-emerald-700 hover:bg-indigo-600 px-1" onClick={() => adjust(0.01)}>
+      <button className="block border-b border-emerald-700 hover:bg-emerald-500 px-1" onClick={() => adjust(0.01)}>
         <i className="fas fa-chevron-up" />
       </button>
-      <button className="block hover:bg-emerald-600 px-1" onClick={() => adjust(-0.01)}>
+      <button className="block hover:bg-emerald-500 px-1" onClick={() => adjust(-0.01)}>
         <i className="fas fa-chevron-down" />
       </button>
     </div>

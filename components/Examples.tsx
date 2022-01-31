@@ -5,11 +5,11 @@ const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));import { f
 
 export default function Examples({ scheme } : { scheme: TaxScheme}) {
   return (
-    <div>
+    <>
       <div>
         under your plan...
       </div>
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto max-h-[calc(100vh-225px)]">
         <Example
           scheme={scheme}
           filingStatus="single"
@@ -45,7 +45,7 @@ export default function Examples({ scheme } : { scheme: TaxScheme}) {
           income={2800000}
         />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -62,8 +62,8 @@ function Example (
   return (
     <div className="m-5 bg-indigo-600 rounded-lg p-3">
       <div className="flex items-center text-2xl">
-        <i className={`fas fa-${icon || 'user'} fa-2x mr-5 fa-fw text-indigo-300`} />
-        <div className="text-center leading-tight mx-auto">
+        <i className={`fas fa-${icon || 'user'} fa-2x fa-fw text-indigo-300`} />
+        <div className="text-left leading-tight mx-auto">
           <div>{title} <br />@ ${income.toLocaleString()}/yr</div>
         </div>
       </div>
@@ -75,7 +75,7 @@ function Example (
         />
         <LabeledData
           label=""
-          value={`${change > 0 ? '+' : ''}${formatPercent(change)}`}
+          value={`${change >= 0 ? '+' : ''}${formatPercent(change)}`}
         />
       </div>
     </div>

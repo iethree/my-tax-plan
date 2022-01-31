@@ -8,7 +8,7 @@ const Builder: NextPage = () => {
       <Head>
         <title>My Tax Plan | Builder</title>
       </Head>
-      <div className="p-3 mx-auto text-center inline-block w-full">
+      <div className="p-3 mx-auto text-center inline-block w-full max-h-screen">
         <h2 className="text-yellow-500 flex items-center justify-center">
           Builder
           <span className="badge indigo ml-5">
