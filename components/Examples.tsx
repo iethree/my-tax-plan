@@ -9,7 +9,7 @@ export default function Examples({ scheme } : { scheme: TaxScheme}) {
       <div>
         under your plan...
       </div>
-      <div className="overflow-y-auto max-h-[calc(100vh-225px)]">
+      <div className="overflow-y-auto md:max-h-[calc(100vh-225px)] grid sm:grid-cols-2 md:grid-cols-1 2xl:grid-cols-2">
         <Example
           scheme={scheme}
           filingStatus="single"
@@ -60,7 +60,7 @@ function Example (
   const change = (tax - baseTax) / baseTax;
 
   return (
-    <div className="m-5 bg-indigo-600 rounded-lg p-3">
+    <div className="m-5 bg-indigo-600 rounded-lg p-3 shadow-lg shadow-gray-900">
       <div className="flex items-center text-2xl">
         <i className={`fas fa-${icon || 'user'} fa-2x fa-fw text-indigo-300`} />
         <div className="text-left leading-tight mx-auto">

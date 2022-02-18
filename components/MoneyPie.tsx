@@ -32,8 +32,8 @@ export default function MoneyPie({ data }: { data: Array<object> }) {
           outerRadius={80}
           label={({ percent, name }) => (
             `${name.length > 24
-                ? name.slice(0, 24) + '...'
-                : name} - ${Math.round(percent * 100)}%`
+              ? name.slice(0, 24) + '...'
+              : name} - ${Math.round(percent * 100)}%`
           )}
         >
           {

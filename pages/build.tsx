@@ -4,7 +4,7 @@ import RateChart from '@/components/RateChart';
 
 const Builder: NextPage = () => {
   return (
-    <div className="flex flex-col justify-around mx-auto">
+    <div className="flex-1 flex-col justify-around mx-auto">
       <Head>
         <title>My Tax Plan | Builder</title>
       </Head>

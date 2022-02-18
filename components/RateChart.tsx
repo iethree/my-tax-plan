@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
   ResponsiveContainer, ComposedChart, XAxis, YAxis, Area,
-  Tooltip, LabelList, Label, Line, Bar, Legend,
- } from 'recharts';
+  Tooltip, LabelList, Label, Bar, Legend,
+} from 'recharts';
 import colors from 'tailwindcss/colors';
 import { TaxScheme } from '@/types/taxTypes';
 import { calculateTaxRevenue } from '@/utils/taxCalc';
@@ -81,87 +81,88 @@ export default function BracketChart() {
   }, [rates]);
 
   return (
-    <div className="block md:flex max-h-full">
-      <div className="w-full md:w-1/2 lg:w-2/3 xl:w-3/4 md:max-h-[calc(100vh-350px)]">
+    <div className="block md:flex md:h-full overflow-hidden justify-around">
+      <div className="w-full md:w-1/2 2xl:w-1/2 md:max-h-[calc(100vh-200px)] flex flex-col min-content">
         <ResultWidget revenue={taxRevenue} baseline={baselineRevenue} />
+        <div className="h-[60vh] md:h-auto md:flex-1 flex-col">
+          <ResponsiveContainer height="100%">
+            <ComposedChart data={rates.income.single}>
+              <Legend
+                verticalAlign="top"
+              />
+              <YAxis
+                yAxisId='left'
+                domain={[0,1]}
+                tickFormatter={(value) => `${value * 100}%`}
+              >
+                <Label
+                  orientation="left"
+                  value="Tax Rate"
+                  position="insideLeft"
+                  angle={270}
+                  fill={colors.white}
+                />
+              </YAxis>
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                domain={[0, 3000000000000]}
+                tickFormatter={(value) => formatBigMoney(value)}
+              >
+                <Label
+                  value="Total Revenue"
+                  position="insideRight"
+                  angle={90}
+                  fill={colors.white}
+                />
+              </YAxis>
+              <XAxis
+                dataKey="min"
+                tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
+              >
+                <Label
+                  value="Income"
+                  position="bottom"
+                  fill={colors.white}
+                />
+              </XAxis>
+              <Tooltip
+                formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
+                labelStyle={ { color: colors.black } }
+                labelFormatter={(value: number) => `taxable income above ${formatBigMoney(value)}`}
+              />
+              <Area
+                type="natural"
+                yAxisId="right"
+                name="revenue"
+                strokeWidth={3}
+                dataKey={(data) => calculateTaxRevenue(rates, data.max)}
+                stroke={colors.emerald[600]}
+                fill={colors.emerald[700]}
+                fillOpacity={0.4}
+                connectNulls={true}
 
-        <ResponsiveContainer height="100%">
-          <ComposedChart data={rates.income.single}>
-            <Legend
-              verticalAlign="top"
-            />
-            <YAxis
-              yAxisId='left'
-              domain={[0,1]}
-              tickFormatter={(value) => `${value * 100}%`}
-            >
-              <Label
-                orientation="left"
-                value="Tax Rate"
-                position="insideLeft"
-                angle={270}
-                fill={colors.white}
               />
-            </YAxis>
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              domain={[0, 3000000000000]}
-              tickFormatter={(value) => formatBigMoney(value)}
-            >
-              <Label
-                value="Total Revenue"
-                position="insideRight"
-                angle={90}
-                fill={colors.white}
-              />
-            </YAxis>
-            <XAxis
-              dataKey="min"
-              tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
-            >
-              <Label
-                value="Income"
-                position="bottom"
-                fill={colors.white}
-              />
-            </XAxis>
-            <Tooltip
-              formatter={(value: number, label: 'revenue' | 'rate') => formatters[label](value)}
-              labelStyle={ { color: colors.black } }
-              labelFormatter={(value: number) => `taxable income above ${formatBigMoney(value)}`}
-            />
-            <Area
-              type="natural"
-              yAxisId="right"
-              name="revenue"
-              strokeWidth={3}
-              dataKey={(data) => calculateTaxRevenue(rates, data.max)}
-              stroke={colors.emerald[600]}
-              fill={colors.emerald[700]}
-              fillOpacity={0.4}
-              connectNulls={true}
-
-            />
-            <Bar
-              dataKey="rate"
-              yAxisId="left"
-              stroke={colors.emerald[800]}
-              fill={colors.emerald[500]}
-              fillOpacity={0.9}
-              onMouseDown={handleBarDrag}
-              onTouchStart={handleBarDrag}
-              className="cursor-ns-resize"
-            >
-              <LabelList
+              <Bar
                 dataKey="rate"
-                position="top"
-                fill={colors.white}
-                formatter={(value: number) => formatters.rate(value)}
-              />
-            </Bar>
-          </ComposedChart>
-        </ResponsiveContainer>
+                yAxisId="left"
+                stroke={colors.emerald[800]}
+                fill={colors.emerald[500]}
+                fillOpacity={0.9}
+                onMouseDown={handleBarDrag}
+                onTouchStart={handleBarDrag}
+                className="cursor-ns-resize"
+              >
+                <LabelList
+                  dataKey="rate"
+                  position="top"
+                  fill={colors.white}
+                  formatter={(value: number) => formatters.rate(value)}
+                />
+              </Bar>
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
         <div className="flex justify-between mx-auto w-3/4">
           {rates.income.single.map((rate, index) => (
             <RateChangeWidget

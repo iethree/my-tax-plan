@@ -12,10 +12,10 @@ const Home: NextPage = () => {
 
         <h1 className="mb-0">
          My Tax Plan
-        <span className="badge indigo ml-5">
-          <i className="fas fa-wrench mr-2" />
+          <span className="badge indigo ml-5">
+            <i className="fas fa-wrench mr-2" />
           work in progress
-        </span>
+          </span>
         </h1>
 
         <h5 className="text-yellow-500">
