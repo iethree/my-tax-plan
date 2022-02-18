@@ -4,11 +4,11 @@ import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
-    <div className="h-screen flex flex-col justify-around">
+    <div className="h-[calc(100vh-120px)]">
       <Head>
         <title>My Tax Plan | Home</title>
       </Head>
-      <main className="p-3 max-w-4xl mx-auto pb-40">
+      <main className="flex flex-col items-center justify-center p-3 max-w-4xl mx-auto pb-40 h-full">
 
         <h1 className="mb-0">
          My Tax Plan
