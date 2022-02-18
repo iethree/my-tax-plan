@@ -26,6 +26,10 @@ p {
   @apply my-4;
 }
 
+.min-content {
+  min-height: min-content;
+}
+
 * {
   box-sizing: border-box;
 }

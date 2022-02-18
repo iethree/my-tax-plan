@@ -6,8 +6,8 @@ import {
 
 import incomeJson from '../data/income.json';
 const incomes: IncomeBracket[] = incomeJson;
-// import defaultRates from '../data/rates.json';
 
+// import defaultRates from '../data/rates.json';
 const filingStatus: string[] = [
   'single',
   'marriedFilingJointly',
@@ -69,6 +69,33 @@ export function calculateTaxpayerRevenue(income: IncomeCategory, rates: TaxSchem
   // TODO payroll tax
 
   return (incomeTax + gainsTax + income.avgAMT) - income.avgCredits;
+};
+
+// calculate tax revenue for a specific taxpayer
+export function calculateSpecificTaxPayerRevenue(income: number, status: FilingStatus, rates: TaxScheme): number {
+
+  const incomeBracket: IncomeBracket | undefined = incomes.slice(1).find((bracket) => income < (bracket.maxAgi || 0));
+
+  if (!incomeBracket) return 0;
+
+  const incomeCategory: IncomeCategory = incomeBracket[status];
+
+  const incomeRatio: number = income / incomeCategory.avgAgi;
+
+  const gainsRatio: number = incomeCategory.avgAgi ? (incomeCategory.avgGains / incomeCategory.avgAgi) : 0;
+  const incomeDeduction: number = incomeCategory.avgDeduction * (1 - gainsRatio);
+  const gainsDeduction: number = incomeCategory.avgDeduction;
+
+  const ordinaryIncome = income * (1 - gainsRatio);
+  const gainsIncome = income * gainsRatio;
+  const taxableIncome = ordinaryIncome - (incomeDeduction + gainsDeduction);
+
+  const incomeTax: number = calculateTax(ordinaryIncome - incomeDeduction, rates.income[status]);
+  const gainsTax: number = calculateGainsTax(taxableIncome, gainsIncome - gainsDeduction, rates.gains[status]);
+  const amtTax: number = incomeCategory.avgAMT * incomeRatio;
+  const credits: number = incomeCategory.avgCredits * incomeRatio;
+
+  return (incomeTax + gainsTax + amtTax) - credits;
 };
 
 // calculate tax revenue for all taxpayers in this status
