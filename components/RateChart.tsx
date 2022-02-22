@@ -1,18 +1,13 @@
-import { useEffect, useState} from 'react';
+import { useEffect } from 'react';
 import {
   ResponsiveContainer, ComposedChart, XAxis, YAxis, Area,
   Tooltip, LabelList, Label, Bar, Legend,
 } from 'recharts';
 import colors from 'tailwindcss/colors';
-import { TaxScheme } from '@/types/taxTypes';
 import { calculateTaxRevenue } from '@/utils/taxCalc';
 import useStore from '../utils/useStore';
-
-import jsonRates from '../data/rates.json';
-const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));
-const baselineRevenue = calculateTaxRevenue(defaultRates);
-
 import { formatBigMoney, formatPercent } from '@/utils/formatters';
+import ResultWidget from './ResultWidget';
 
 const formatters = {
   revenue: formatBigMoney,
@@ -22,10 +17,8 @@ const formatters = {
 export default function BracketChart() {
   const {
     rates, setRates,
-    taxRevenue, setTaxRevenue,
+    setTaxRevenue,
   } = useStore();
-
-  const [showYAxes, setShowYAxes] = useState(true);
 
   const adjust = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
@@ -49,13 +42,14 @@ export default function BracketChart() {
     let startYPos: number | null = null;
 
     const mouseMove = (mouseEvent: any) => {
+      mouseEvent.preventDefault();
       const currentPos = mouseEvent.clientY || mouseEvent.touches[0].clientY;
       if (startYPos === null) {
         startYPos = currentPos;
         return;
       }
       const moveDistance = startYPos - currentPos;
-      const moveAmount = Math.round(moveDistance / 2) * .01;
+      const moveAmount = Math.round(moveDistance / 3) * .01;
 
       adjust(rateIndex, moveAmount);
 
@@ -80,14 +74,12 @@ export default function BracketChart() {
     setTaxRevenue(calculateTaxRevenue(rates));
   }, [rates, setTaxRevenue]);
 
-  useEffect(() => {
-    setShowYAxes(window.innerWidth > 500);
-  }, []);
-
   return (
-    <div className="w-full md:w-1/2 2xl:w-1/2 md:max-h-[calc(100vh-200px)] flex flex-col min-content">
-      <ResultWidget revenue={taxRevenue} baseline={baselineRevenue} />
-      <div className="h-[60vh] md:h-auto md:flex-1 flex-col touch-none">
+    <div className="w-full h-full flex flex-col">
+      <div className="h-[70vh] md:h-auto md:flex-1 touch-none relative">
+        <div className="absolute top-0 left-0 mt-10 ml-5">
+          <ResultWidget />
+        </div>
         <ResponsiveContainer height="100%">
           <ComposedChart data={rates.income.single}>
             <Legend
@@ -96,31 +88,14 @@ export default function BracketChart() {
             <YAxis
               yAxisId='left'
               domain={[0,1]}
-              tickFormatter={(value) => `${value * 100}%`}
-              hide={!showYAxes}
-            >
-              <Label
-                orientation="left"
-                value="Tax Rate"
-                position="insideLeft"
-                angle={270}
-                fill={colors.white}
-              />
-            </YAxis>
+              hide
+            />
             <YAxis
               yAxisId="right"
               orientation="right"
-              domain={[0, 3000000000000]}
-              tickFormatter={(value) => formatBigMoney(value)}
-              hide={!showYAxes}
-            >
-              <Label
-                value="Total Revenue"
-                position="insideRight"
-                angle={90}
-                fill={colors.white}
-              />
-            </YAxis>
+              domain={[0, 2000000000000]}
+              hide
+            />
             <XAxis
               dataKey="min"
               tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
@@ -146,8 +121,14 @@ export default function BracketChart() {
               fill={colors.emerald[700]}
               fillOpacity={0.4}
               connectNulls={true}
-
-            />
+            >
+              <LabelList
+                position="top"
+                fill={colors.green[300]}
+                z={90000}
+                formatter={(value: number) => formatBigMoney(value)}
+              />
+            </Area>
             <Bar
               dataKey="rate"
               yAxisId="left"
@@ -168,7 +149,7 @@ export default function BracketChart() {
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex justify-between mx-auto w-3/4">
+      <div className="flex justify-around mx-auto w-full">
         {rates.income.single.map((rate, index) => (
           <RateChangeWidget
             key={rate.max}
@@ -193,18 +174,3 @@ function RateChangeWidget({ adjust }: { adjust: Function }) {
   );
 }
 
-function ResultWidget({ revenue, baseline } : { revenue: number, baseline: number }) {
-  const change = (revenue - baseline) / baseline;
-  return (
-    <div className="bg-indigo-600 rounded-lg px-5 py-2 mt-5 flex w-64 mx-auto items-center justify-around">
-      <div className="text-2xl md:text-4xl">
-        <div className="font-bold text-4xl">{formatBigMoney(revenue)}</div>
-        <div className="uppercase text-sm text-indigo-300">Total Revenue</div>
-      </div>
-      <div className="text-2xl text-indigo-300">
-        {change > 0 && '+'}
-        {formatPercent(change)}
-      </div>
-    </div>
-  );
-}

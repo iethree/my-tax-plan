@@ -7,45 +7,54 @@ const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));import { f
 export default function Examples() {
   const scheme : TaxScheme = useStore(state => state.rates);
   return (
-    <div>
+    <div className="flex flex-col">
       <div>
         under your plan...
       </div>
-      <div className="overflow-y-auto md:max-h-[calc(100vh-225px)] grid sm:grid-cols-2 md:grid-cols-1 2xl:grid-cols-2">
-        <Example
-          scheme={scheme}
-          filingStatus="single"
-          title="Single Person"
-          income={20000}
-        />
-        <Example
-          scheme={scheme}
-          filingStatus="marriedFilingJointly"
-          title="Family"
-          icon="user-friends"
-          income={50000}
-        />
-        <Example
-          scheme={scheme}
-          filingStatus="headOfHousehold"
-          title="Single Parent"
-          icon="users"
-          income={85000}
-        />
-        <Example
-          scheme={scheme}
-          filingStatus="marriedFilingJointly"
-          title="Wealthy Family"
-          icon="users"
-          income={500000}
-        />
-        <Example
-          scheme={scheme}
-          filingStatus="marriedFilingJointly"
-          title="Top 0.1% Family"
-          icon="users"
-          income={2800000}
-        />
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid sm:grid-cols-2 md:grid-cols-1 2xl:grid-cols-2 min-conent">
+          <Example
+            scheme={scheme}
+            filingStatus="single"
+            title="Single Person"
+            income={20000}
+          />
+          <Example
+            scheme={scheme}
+            filingStatus="marriedFilingJointly"
+            title="Family"
+            icon="user-friends"
+            income={50000}
+          />
+          <Example
+            scheme={scheme}
+            filingStatus="headOfHousehold"
+            title="Single Parent"
+            icon="users"
+            income={85000}
+          />
+          <Example
+            scheme={scheme}
+            filingStatus="marriedFilingJointly"
+            title="Wealthy Family"
+            icon="users"
+            income={150000}
+          />
+          <Example
+            scheme={scheme}
+            filingStatus="marriedFilingJointly"
+            title="Wealthier Family"
+            icon="users"
+            income={500000}
+          />
+          <Example
+            scheme={scheme}
+            filingStatus="marriedFilingJointly"
+            title="Top 0.1% Family"
+            icon="users"
+            income={2800000}
+          />
+        </div>
       </div>
     </div>
   );
