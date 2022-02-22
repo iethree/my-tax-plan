@@ -25,6 +25,7 @@ export default function BracketChart() {
     taxRevenue, setTaxRevenue,
   } = useStore();
 
+  const [showYAxes, setShowYAxes] = useState(true);
 
   const adjust = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
@@ -79,11 +80,14 @@ export default function BracketChart() {
     setTaxRevenue(calculateTaxRevenue(rates));
   }, [rates, setTaxRevenue]);
 
+  useEffect(() => {
+    setShowYAxes(window.innerWidth > 500);
+  }, []);
 
   return (
     <div className="w-full md:w-1/2 2xl:w-1/2 md:max-h-[calc(100vh-200px)] flex flex-col min-content">
       <ResultWidget revenue={taxRevenue} baseline={baselineRevenue} />
-        <div className="h-[60vh] md:h-auto md:flex-1 flex-col">
+      <div className="h-[60vh] md:h-auto md:flex-1 flex-col touch-none">
         <ResponsiveContainer height="100%">
           <ComposedChart data={rates.income.single}>
             <Legend
@@ -93,6 +97,7 @@ export default function BracketChart() {
               yAxisId='left'
               domain={[0,1]}
               tickFormatter={(value) => `${value * 100}%`}
+              hide={!showYAxes}
             >
               <Label
                 orientation="left"
@@ -107,6 +112,7 @@ export default function BracketChart() {
               orientation="right"
               domain={[0, 3000000000000]}
               tickFormatter={(value) => formatBigMoney(value)}
+              hide={!showYAxes}
             >
               <Label
                 value="Total Revenue"
