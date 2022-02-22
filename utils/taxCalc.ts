@@ -69,7 +69,7 @@ export function calculateTaxpayerRevenue(income: IncomeCategory, rates: TaxSchem
   // TODO payroll tax
 
   return (incomeTax + gainsTax + income.avgAMT) - income.avgCredits;
-};
+}
 
 // calculate tax revenue for a specific taxpayer
 export function calculateSpecificTaxPayerRevenue(income: number, status: FilingStatus, rates: TaxScheme): number {
@@ -96,7 +96,7 @@ export function calculateSpecificTaxPayerRevenue(income: number, status: FilingS
   const credits: number = incomeCategory.avgCredits * incomeRatio;
 
   return (incomeTax + gainsTax + amtTax) - credits;
-};
+}
 
 // calculate tax revenue for all taxpayers in this status
 export function calculateStatusRevenue(income: IncomeCategory, rates: TaxScheme): number {
@@ -104,7 +104,7 @@ export function calculateStatusRevenue(income: IncomeCategory, rates: TaxScheme)
   const allTaxpayers: number = avgTaxpayer * income.qty;
 
   return Math.round(allTaxpayers);
-};
+}
 
 
 export function calculateSingleBracketRevenue(rates: TaxScheme, incomeBracket: IncomeBracket): number {
@@ -127,7 +127,7 @@ export function calculateAllBracketsRevenue(rates: TaxScheme): number {
 
 function filterIncomesOver(rates: TaxRate[], maxIncome: number) {
   return rates.filter(bracket => bracket.max <= maxIncome)
-};
+}
 
 export function calculateTaxRevenue(rates: TaxScheme, maxIncome: number = 10000000000): number {
   const partialScheme: TaxScheme = {

@@ -9,7 +9,6 @@ const Home: NextPage = () => {
         <title>My Tax Plan | Home</title>
       </Head>
       <main className="flex flex-col items-center justify-center p-3 max-w-4xl mx-auto pb-40 h-full">
-
         <h1 className="mb-0">
          My Tax Plan
           <span className="badge indigo ml-5">
