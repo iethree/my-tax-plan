@@ -1,11 +1,13 @@
 import { FilingStatus, TaxScheme } from "@/types/taxTypes";
 import { calculateSpecificTaxPayerRevenue } from "@/utils/taxCalc";
 import jsonRates from '../data/rates.json';
+import useStore from '../utils/useStore';
 const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));import { formatPercent } from "@/utils/formatters";
 
-export default function Examples({ scheme } : { scheme: TaxScheme}) {
+export default function Examples() {
+  const scheme : TaxScheme = useStore(state => state.rates);
   return (
-    <>
+    <div>
       <div>
         under your plan...
       </div>
@@ -45,7 +47,7 @@ export default function Examples({ scheme } : { scheme: TaxScheme}) {
           income={2800000}
         />
       </div>
-    </>
+    </div>
   );
 }
 

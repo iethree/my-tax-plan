@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import RateChart from '@/components/RateChart';
+import Examples from '@/components/Examples';
 
 const Builder: NextPage = () => {
   return (
@@ -16,7 +17,10 @@ const Builder: NextPage = () => {
             work in progress
           </span>
         </h2>
-        <RateChart />
+        <div className="block md:flex md:h-full overflow-hidden justify-around">
+          <RateChart />
+          <Examples />
+        </div>
       </div>
     </div>
   );
