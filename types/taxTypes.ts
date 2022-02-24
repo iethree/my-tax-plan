@@ -2,7 +2,7 @@ export interface TaxRate {
   rate: number;
   min: number;
   max: number;
-};
+}
 
 export type FilingStatus = 'all' | 'single' | 'marriedFilingJointly' | 'marriedFilingSeparately' | 'headOfHousehold';
 
@@ -12,12 +12,18 @@ export interface TaxRates {
   headOfHousehold: TaxRate[];
   single: TaxRate[];
   [key: string]: TaxRate[];
-};
+}
 
+export interface PayrollTaxRates {
+  socialSecurity: TaxRate[];
+  medicare: TaxRate[];
+}
 export interface TaxScheme {
   income: TaxRates;
   gains: TaxRates;
-};
+  payroll: PayrollTaxRates;
+  gainsAsIncome?: boolean;
+}
 
 export interface IncomeCategory {
   status: FilingStatus | string;
@@ -34,7 +40,7 @@ export interface IncomeCategory {
   avgRate: number;
   avgRateAfterCredits: number;
   avgTaxAfterCredits: number;
-};
+}
 
 export interface IncomeBracket {
   qty: number;
@@ -47,5 +53,5 @@ export interface IncomeBracket {
   marriedFilingJointly: IncomeCategory;
   marriedFilingSeparately: IncomeCategory;
   headOfHousehold: IncomeCategory;
-};
+}
 

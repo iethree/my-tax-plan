@@ -1,12 +1,13 @@
 // const { describe, it } = require('mocha');
 import { expect, assert } from 'chai';
 import {
-  TaxRate, TaxRates, TaxScheme,
+  TaxRate, TaxRates, TaxScheme, PayrollTaxRates,
   IncomeCategory, IncomeBracket,
 } from '../types/taxTypes';
 
 import {
   calculateTax,
+  calculatePayrollTax,
   calculateStatusRevenue,
   calculateAllBracketsRevenue,
   calculateSingleBracketRevenue,
@@ -43,6 +44,10 @@ const simpleScheme: TaxScheme = {
     marriedFilingSeparately: flatRates,
     headOfHousehold: flatRates,
     single: flatRates,
+  },
+  payroll: {
+    socialSecurity: [],
+    medicare: [],
   },
 };
 
@@ -202,11 +207,19 @@ describe('tax calc tests', () => {
   });
 
   describe('actual tax revenue checks', () => {
+    const actualSchemeWithoutPayroll = {
+      ...actualScheme,
+      payroll: {
+        socialSecurity: [],
+        medicare: [],
+      }
+    };
+
     it(`can calculate each bracket revenue within ${BRACKET_ERROR_MARGIN * 100}% margin of error`, () => {
       const calculations: object[] = [];
 
       myIncomes.slice(1).forEach((thisBracket: IncomeBracket) => {
-        const calculatedRevenue: number = calculateSingleBracketRevenue(actualScheme, thisBracket);
+        const calculatedRevenue: number = calculateSingleBracketRevenue(actualSchemeWithoutPayroll, thisBracket);
         const actualRevenue: number  = thisBracket.all.avgTaxAfterCredits * thisBracket.all.qty;
 
         const revenueDiff: number = calculatedRevenue - actualRevenue;
@@ -232,7 +245,7 @@ describe('tax calc tests', () => {
 
     it(`can calculate all bracket revenues within ${TOTAL_ERROR_MARGIN * 100}% margin of error`, () => {
 
-      const calculatedRevenue = calculateAllBracketsRevenue(actualScheme);
+      const calculatedRevenue = calculateAllBracketsRevenue(actualSchemeWithoutPayroll);
 
       const actualRevenue = myIncomes[0].all.avgTax * myIncomes[0].all.qty;
       const revenueDiff = calculatedRevenue - actualRevenue;
@@ -250,7 +263,43 @@ describe('tax calc tests', () => {
     })
   });
 
+  describe('calculates payroll taxes', () => {
+    const simplePayrollTaxes: PayrollTaxRates = {
+      socialSecurity: [{
+        min: 0,
+        max: 1000,
+        rate: 0.2,
+      }],
+      medicare: [{
+        min: 0,
+        max: 2000,
+        rate: 0.1,
+      }],
+    };
 
+    const incomeCategory: IncomeCategory = {
+      status: 'single',
+      qty: 2,
+      avgAgi: 100,
+      avgWages: 100,
+      avgOrdinaryIncome: 3000,
+      avgDeduction: 0,
+      avgTaxable: 100,
+      avgTax: 0,
+      avgGains: 0,
+      avgAMT: 0,
+      avgCredits: 3,
+      avgRate: 0,
+      avgRateAfterCredits: 0,
+      avgTaxAfterCredits: 0,
+    };
+
+
+    it('can calculate payroll taxes', () => {
+      const tax = calculatePayrollTax(incomeCategory, simplePayrollTaxes);
+      expect(tax).to.equal(200 + 200);
+    });
+  });
 });
 
 export {};

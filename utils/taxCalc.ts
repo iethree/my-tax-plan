@@ -1,5 +1,5 @@
 import {
-  TaxRate, TaxRates, TaxScheme,
+  TaxRate, TaxRates, TaxScheme, PayrollTaxRates,
   IncomeCategory, IncomeBracket,
   FilingStatus,
 } from '@/types/taxTypes';
@@ -51,8 +51,12 @@ export function calculateGainsTax(totalTaxable: number, taxableGains: number, ra
   return taxableGains * gainsRate;
 }
 
-export function calculatePayrollTax(income: IncomeCategory, rates: TaxRate[]): number {
-  return 0;
+export function calculatePayrollTax(income: IncomeCategory, rates: PayrollTaxRates): number {
+
+  const socialSecurity = calculateTax(income.avgOrdinaryIncome, rates.socialSecurity);
+  const medicare = calculateTax(income.avgOrdinaryIncome, rates.medicare);
+
+  return (socialSecurity + medicare);
 }
 
 
@@ -66,9 +70,9 @@ export function calculateTaxpayerRevenue(income: IncomeCategory, rates: TaxSchem
 
   const incomeTax: number = calculateTax(income.avgOrdinaryIncome - incomeDeduction, rates.income[status]);
   const gainsTax: number = calculateGainsTax(income.avgTaxable, income.avgGains - gainsDeduction, rates.gains[status]);
-  // TODO payroll tax
+  const payrollTax: number = calculatePayrollTax(income, rates.payroll);
 
-  return (incomeTax + gainsTax + income.avgAMT) - income.avgCredits;
+  return (incomeTax + gainsTax + income.avgAMT + payrollTax) - income.avgCredits;
 }
 
 // calculate tax revenue for a specific taxpayer
@@ -131,13 +135,13 @@ function filterIncomesOver(rates: TaxRate[], maxIncome: number) {
 
 export function calculateTaxRevenue(rates: TaxScheme, maxIncome: number = 10000000000): number {
   const partialScheme: TaxScheme = {
+    ...rates,
     income: {
       single: filterIncomesOver(rates.income.single, maxIncome),
       marriedFilingJointly: filterIncomesOver(rates.income.marriedFilingJointly, maxIncome),
       marriedFilingSeparately: filterIncomesOver(rates.income.marriedFilingSeparately, maxIncome),
       headOfHousehold: filterIncomesOver(rates.income.headOfHousehold, maxIncome),
     },
-    gains: rates.gains,
   };
 
   return (
