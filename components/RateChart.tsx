@@ -93,7 +93,7 @@ export default function BracketChart() {
             <YAxis
               yAxisId="right"
               orientation="right"
-              domain={[0, 2000000000000]}
+              domain={[0, 2500000000000]}
               hide
             />
             <XAxis

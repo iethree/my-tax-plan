@@ -51,9 +51,9 @@ export function calculateGainsTax(totalTaxable: number, taxableGains: number, ra
   return taxableGains * gainsRate;
 }
 
-export function calculatePayrollTax(income: IncomeCategory, rates: PayrollTaxRates): number {
-  const socialSecurity = calculateTax(income.avgWages, rates.socialSecurity);
-  const medicare = calculateTax(income.avgWages, rates.medicare);
+export function calculatePayrollTax(wages: number, rates: PayrollTaxRates): number {
+  const socialSecurity = calculateTax(wages, rates.socialSecurity);
+  const medicare = calculateTax(wages, rates.medicare);
 
   return (socialSecurity + medicare);
 }
@@ -67,9 +67,15 @@ export function calculateTaxpayerRevenue(income: IncomeCategory, rates: TaxSchem
   const incomeDeduction: number = (income.avgDeduction * (1 - gainsRatio));
   const gainsDeduction: number = income.avgDeduction * gainsRatio;
 
-  const incomeTax: number = calculateTax(income.avgOrdinaryIncome - incomeDeduction, rates.income[status]);
-  const gainsTax: number = calculateGainsTax(income.avgTaxable, income.avgGains - gainsDeduction, rates.gains[status]);
-  const payrollTax: number = calculatePayrollTax(income, rates.payroll);
+  const incomeTax: number = rates.gainsAsIncome
+    ? calculateTax(income.avgOrdinaryIncome + income.avgGains - income.avgDeduction, rates.income[status])
+    : calculateTax(income.avgOrdinaryIncome - incomeDeduction, rates.income[status]);
+
+  const gainsTax: number = rates.gainsAsIncome
+    ? 0
+    : calculateGainsTax(income.avgTaxable, income.avgGains - gainsDeduction, rates.gains[status]);
+
+  const payrollTax: number = calculatePayrollTax(income.avgWages, rates.payroll);
 
   return (incomeTax + gainsTax + income.avgAMT + payrollTax) - income.avgCredits;
 }
@@ -86,19 +92,29 @@ export function calculateSpecificTaxPayerRevenue(income: number, status: FilingS
   const incomeRatio: number = income / incomeCategory.avgAgi;
 
   const gainsRatio: number = incomeCategory.avgAgi ? (incomeCategory.avgGains / incomeCategory.avgAgi) : 0;
+  const wageRatio: number = incomeCategory.avgWages ? (incomeCategory.avgWages / incomeCategory.avgAgi) : 0;
   const incomeDeduction: number = incomeCategory.avgDeduction * (1 - gainsRatio);
-  const gainsDeduction: number = incomeCategory.avgDeduction;
+  const gainsDeduction: number = incomeCategory.avgDeduction * gainsRatio;
 
   const ordinaryIncome = income * (1 - gainsRatio);
   const gainsIncome = income * gainsRatio;
   const taxableIncome = ordinaryIncome - (incomeDeduction + gainsDeduction);
+  const wages = income * wageRatio;
 
-  const incomeTax: number = calculateTax(ordinaryIncome - incomeDeduction, rates.income[status]);
-  const gainsTax: number = calculateGainsTax(taxableIncome, gainsIncome - gainsDeduction, rates.gains[status]);
+  const incomeTax: number = rates.gainsAsIncome
+    ? calculateTax(income - incomeCategory.avgDeduction, rates.income[status])
+    : calculateTax(ordinaryIncome - incomeDeduction, rates.income[status]);
+
+  const gainsTax: number = rates.gainsAsIncome
+    ? 0
+    : calculateGainsTax(taxableIncome, gainsIncome - gainsDeduction, rates.gains[status]);
+
+  const payrollTax: number = calculatePayrollTax(wages, rates.payroll);
+
   const amtTax: number = incomeCategory.avgAMT * incomeRatio;
   const credits: number = incomeCategory.avgCredits * incomeRatio;
 
-  return (incomeTax + gainsTax + amtTax) - credits;
+  return (incomeTax + gainsTax + amtTax + payrollTax) - credits;
 }
 
 // calculate tax revenue for all taxpayers in this status
