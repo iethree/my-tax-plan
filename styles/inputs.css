@@ -1,0 +1,14 @@
+
+
+input  {
+  @apply bg-inherit border-b outline-none;
+
+  &:focus, &:active {
+    margin-bottom: -1px;
+    border-bottom: 2px solid;
+  }
+}
+
+fieldset:disabled, input:disabled {
+  @apply opacity-50;
+}

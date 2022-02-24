@@ -7,11 +7,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const rateCSV: any = fs.readFileSync(__dirname + '/../raw/income_tax_rates.csv', 'utf8');
 const gainsRateCSV: any = fs.readFileSync(__dirname + '/../raw/gains_tax_rates.csv', 'utf8');
+const payrollRateCSV: any = fs.readFileSync(__dirname + '/../raw/payroll_tax_rates.csv', 'utf8');
 
 // @ts-ignore
 const rateJSON: any = papa.parse(rateCSV, { header: true, ignoreBlankLines: true, dynamicTyping: true }).data;
 // @ts-ignore
 const gainsRateJSON: any = papa.parse(gainsRateCSV, { header: true, ignoreBlankLines: true, dynamicTyping: true }).data;
+// @ts-ignore
+const payrollRateJSON: any = papa.parse(payrollRateCSV, { header: true, ignoreBlankLines: true, dynamicTyping: true }).data;
 
 // group by status
 const incomeRatesByStatus: TaxRates = rateJSON.reduce((acc: any, curr: any) => {
@@ -44,9 +47,19 @@ const gainsRatesByStatus: TaxRates = gainsRateJSON.reduce((acc: any, curr: any) 
   headOfHousehold: [],
 });
 
+const payrollRates = payrollRateJSON.reduce((acc: any, curr: any) =>{
+  acc[curr.type].push({
+    rate: curr.rate,
+    min: curr.min,
+    max: curr.max,
+  });
+  return acc;
+}, { socialSecurity: [], medicare: [] });
+
 const allRates: TaxScheme = {
   income: incomeRatesByStatus,
   gains: gainsRatesByStatus,
+  payroll: payrollRates,
 };
 
 const fileName = __dirname + '/../rates.json';

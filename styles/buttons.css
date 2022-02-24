@@ -1,3 +1,15 @@
 .button {
-  @apply px-4 py-2 bg-indigo-900 shadow-sm hover:bg-indigo-800 text-white rounded-lg;
+  @apply px-4 py-2 bg-indigo-900 shadow-sm hover:bg-indigo-800 text-white rounded-lg font-bold;
+
+  &.yellow {
+    @apply bg-yellow-500 hover:bg-yellow-400 text-gray-900;
+  }
+
+  &.green {
+    @apply bg-emerald-700 hover:bg-emerald-600;
+  }
+
+  &.small {
+    @apply px-3 py-1 text-sm;
+  }
 }
