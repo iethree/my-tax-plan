@@ -298,7 +298,7 @@ describe('tax calc tests', () => {
 
 
     it('can calculate simple payroll taxes', () => {
-      const tax = calculatePayrollTax(incomeCategory, simplePayrollTaxes);
+      const tax = calculatePayrollTax(incomeCategory.avgWages, simplePayrollTaxes);
       expect(tax).to.equal(200 + 200);
     });
 
@@ -309,7 +309,7 @@ describe('tax calc tests', () => {
       let payrollTaxRevenue: number = 0;
       myIncomes.slice(1).forEach((thisBracket: IncomeBracket) => {
 
-        const tax = calculatePayrollTax(thisBracket.all, actualScheme.payroll);
+        const tax = calculatePayrollTax(thisBracket.all.avgWages, actualScheme.payroll);
         payrollTaxRevenue += (tax * thisBracket.all.qty);
       });
 
