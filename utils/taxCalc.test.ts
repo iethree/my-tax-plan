@@ -2,7 +2,7 @@
 import { expect, assert } from 'chai';
 import {
   TaxRate, TaxRates, TaxScheme, PayrollTaxRates,
-  IncomeCategory, IncomeBracket,
+  IncomeCategory, IncomeBracket, FilingStatus,
 } from '../types/taxTypes';
 
 import {
@@ -15,9 +15,11 @@ import {
 
 import defaultRates from '../data/rates.json';
 import income from '../data/income.json';
+import revenue from '../data/revenue.json';
 
 const BRACKET_ERROR_MARGIN: number = 0.12;
 const TOTAL_ERROR_MARGIN: number = 0.02;
+const PAYROLL_ERROR_MARGIN: number = 0.09;
 
 const actualScheme: TaxScheme = defaultRates;
 const myIncomes: IncomeBracket[] = income;
@@ -281,7 +283,7 @@ describe('tax calc tests', () => {
       status: 'single',
       qty: 2,
       avgAgi: 100,
-      avgWages: 100,
+      avgWages: 3000,
       avgOrdinaryIncome: 3000,
       avgDeduction: 0,
       avgTaxable: 100,
@@ -295,9 +297,30 @@ describe('tax calc tests', () => {
     };
 
 
-    it('can calculate payroll taxes', () => {
+    it('can calculate simple payroll taxes', () => {
       const tax = calculatePayrollTax(incomeCategory, simplePayrollTaxes);
       expect(tax).to.equal(200 + 200);
+    });
+
+    it(`can calculate actual payroll tax revenues within ${PAYROLL_ERROR_MARGIN * 100}%`, () => {
+      // we divide by 2 because half of payroll taxes are paid by employers
+      const actualRevenue = (revenue.find((type) => type.parent_plain === 'Social Security and Medicare Taxes')?.federal_revenue || 0) / 2;
+
+      let payrollTaxRevenue: number = 0;
+      myIncomes.slice(1).forEach((thisBracket: IncomeBracket) => {
+
+        const tax = calculatePayrollTax(thisBracket.all, actualScheme.payroll);
+        payrollTaxRevenue += (tax * thisBracket.all.qty);
+      });
+
+      const revenueDiff = payrollTaxRevenue - actualRevenue;
+      const variance = Math.round((revenueDiff / actualRevenue) * 1000) / 1000;
+
+      assert.approximately(
+        variance,
+        0,
+        PAYROLL_ERROR_MARGIN,
+      );
     });
   });
 });

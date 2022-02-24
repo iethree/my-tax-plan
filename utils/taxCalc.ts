@@ -52,9 +52,8 @@ export function calculateGainsTax(totalTaxable: number, taxableGains: number, ra
 }
 
 export function calculatePayrollTax(income: IncomeCategory, rates: PayrollTaxRates): number {
-
-  const socialSecurity = calculateTax(income.avgOrdinaryIncome, rates.socialSecurity);
-  const medicare = calculateTax(income.avgOrdinaryIncome, rates.medicare);
+  const socialSecurity = calculateTax(income.avgWages, rates.socialSecurity);
+  const medicare = calculateTax(income.avgWages, rates.medicare);
 
   return (socialSecurity + medicare);
 }
