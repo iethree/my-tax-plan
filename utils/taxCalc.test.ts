@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // const { describe, it } = require('mocha');
 import { expect, assert } from 'chai';
 import {
@@ -11,6 +12,8 @@ import {
   calculateStatusRevenue,
   calculateAllBracketsRevenue,
   calculateSingleBracketRevenue,
+  calculateTaxpayerRevenue,
+  calculateSpecificTaxPayerRevenue,
 } from './taxCalc';
 
 import defaultRates from '../data/rates.json';
@@ -87,8 +90,6 @@ describe('tax calc tests', () => {
     });
 
     it('can calculate multiple brackets', () => {
-
-
       const incomeCategory: IncomeCategory = {
         status: 'single',
         qty: 1,
@@ -141,7 +142,6 @@ describe('tax calc tests', () => {
     });
 
     it('can account for credits', () => {
-
       const incomeCategory: IncomeCategory = {
         status: 'single',
         qty: 2,
@@ -205,6 +205,16 @@ describe('tax calc tests', () => {
       );
 
       expect(calculatedRevenue).to.equal(7 * incomeBracket.qty);
+    });
+  });
+
+  describe('single taxpayer revenue', () => {
+    it('can calculate revenue for an average taxpayer', () => {
+      throw new Error('not implemented');
+    });
+
+    it('can calculate revenue for a specific taxpayer', () => {
+      throw new Error('not implemented');
     });
   });
 

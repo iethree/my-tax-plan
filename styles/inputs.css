@@ -9,6 +9,13 @@ input  {
   }
 }
 
+select {
+  @apply bg-inherit border-b outline-none;
+  option, option:focus, option:active {
+    @apply text-gray-200 bg-gray-900 bg-opacity-80 outline-none border-none p-2 bg-clip-border;
+  }
+}
+
 fieldset:disabled, input:disabled {
   @apply opacity-50;
 }

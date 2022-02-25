@@ -1,12 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
+import { supabase } from '../utils/api';
+import useStore from '../utils/useStore';
+
+import PlanSelect from '@/components/PlanSelect';
 import Head from 'next/head';
 import RateChart from '@/components/RateChart';
 import Examples from '@/components/Examples';
 import AdvancedBuilder from '@/components/AdvancedBuilder';
 
+
 const Builder: NextPage = () => {
   const [view, setView] = useState('simple');
+  const { plans, setPlans } = useStore();
+
+  useEffect(() => {
+    !plans.length && supabase.from('tax_plans')
+      .then((res) => {
+        if (res?.data?.length) {
+          setPlans(res.data);
+        }
+      });
+  }, [plans.length, setPlans]);
 
   return (
     <div className="flex flex-col justify-around mx-auto">
@@ -30,6 +45,9 @@ const Builder: NextPage = () => {
             work in progress
           </span>
         </h2>
+        <div className="absolute top-0 right-0 p-5">
+          <PlanSelect />
+        </div>
         <div className="block md:flex overflow-hidden justify-around min-content">
           {view === 'advanced' && <AdvancedBuilder close={() => setView('simple')}/>}
           <div className="flex flex-col w-full md:w-1/2 2xl:w-1/2 ">

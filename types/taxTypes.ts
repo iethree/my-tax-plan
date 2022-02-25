@@ -25,6 +25,15 @@ export interface TaxScheme {
   gainsAsIncome?: boolean;
 }
 
+export interface TaxPlan {
+  id: number;
+  hash: string;
+  user_id: string | null;
+  title: string | null;
+  description: string | null;
+  scheme: TaxScheme;
+}
+
 export interface IncomeCategory {
   status: FilingStatus | string;
   qty: number;

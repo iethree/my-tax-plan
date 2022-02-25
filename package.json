@@ -15,6 +15,7 @@
     "parse:all": "npm run parse:spending && npm run parse:revenue && npm run parse:income && npm run parse:rates"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^1.30.6",
     "lodash": "^4.17.21",
     "next": "12.0.7",
     "react": "17.0.2",
