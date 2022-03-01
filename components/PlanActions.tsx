@@ -75,7 +75,7 @@ export default function PlanSelect() {
   }
 
   return (
-    <>
+    <div className="text-right">
       {!user?.id ? (
         <button id="login-modal" className="button small" onClick={() => LoginModal.show()}>
           <i className="fas fa-right-to-bracket mr-2" />
@@ -103,6 +103,6 @@ export default function PlanSelect() {
           </button>
         </>
       )}
-    </>
+    </div>
   );
 }

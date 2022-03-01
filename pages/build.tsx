@@ -21,23 +21,25 @@ const Builder: NextPage = () => {
       </Head>
       <div className="p-3 mx-auto text-center w-full md:max-h-[calc(100vh-100px)] overflow-hidden flex flex-col relative">
         {!!plans?.length && (
-          <div className="absolute top-0 left-0 p-5 flex">
-            <button
-              title="advanced options"
-              className="button yellow small"
-              onClick={() => setShowOptions(v => !v)}
-            >
-              <i className="fas fa-wrench" />
-            </button>
-            <div className="mx-2 md:w-48">
-              <PlanSelect />
+          <div className="absolute top-0 right-0 md:left-0 p-5 md:flex">
+            <div className="flex">
+              <button
+                title="advanced options"
+                className="button yellow small"
+                onClick={() => setShowOptions(v => !v)}
+              >
+                <i className="fas fa-wrench" />
+              </button>
+              <div className="mx-2 md:w-48">
+                <PlanSelect />
+              </div>
             </div>
             <div className="ml-2">
               <PlanActions />
             </div>
           </div>
         )}
-        <h2 className="text-yellow-500 text-right md:text-center">
+        <h2 className="text-yellow-500 text-left md:text-center mb-10 md:mb-2">
           Builder
         </h2>
         <div className="block md:flex overflow-hidden justify-around min-content">

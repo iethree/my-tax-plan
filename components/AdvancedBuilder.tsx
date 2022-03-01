@@ -44,14 +44,14 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
   }
 
   return (
-    <div className="rounded-lg  border-indigo-500 bg-indigo-600 bg-opacity-50 p-3 flex flex-col flex-shrink-0">
+    <div className="rounded-lg border-indigo-500 bg-indigo-600 bg-opacity-50 p-3 flex flex-col flex-shrink-0 md:w-50">
       <div className="flex justify-between items-start text-left">
         <h5>Plan Settings</h5>
         <button className="text-yellow-500 ml-5">
           <i className="fas fa-times" onClick={close} />
         </button>
       </div>
-      <form className="text-left">
+      <form className="text-left overflow-y-auto p-2">
         <fieldset>
           <div>
             <label className="block">Title</label>
@@ -98,12 +98,12 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
                 <span>
                   <input
                     type="number"
-                    className="text-right mx-1 w-12"
+                    className="text-right mx-1 w-14"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => { adjustGainsRate(i, Number(e.target.value) / 100) }}
                     max={100}
                     min={0}
-                    step={1}
-                    value={r.rate * 100}
+                    step={.1}
+                    value={Math.round(r.rate * 10000) / 100}
                   />%
                 </span>
               </label>
@@ -128,7 +128,7 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
                 <span>
                   <input
                     type="number"
-                    className="text-right mx-2 w-12"
+                    className="text-right mx-2 w-14"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => { adjustPayrollRate('socialSecurity', i, Number(e.target.value) / 100) }}
                     max={100}
                     min={0}
@@ -150,7 +150,7 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
                 <span>
                   <input
                     type="number"
-                    className="text-right mx-2 w-12"
+                    className="text-right mx-2 w-14"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => { adjustPayrollRate('medicare', i, Number(e.target.value) / 100) }}
                     max={100}
                     min={0}
