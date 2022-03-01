@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       updateUser();
       setCurrentPlanIndex(0);
     });
-  }, [updateUser]);
+  }, [updateUser, setCurrentPlanIndex]);
 
   // load plans from api and/or local storage
   useEffect(() => {

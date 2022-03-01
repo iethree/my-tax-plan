@@ -2,18 +2,15 @@
 // const { describe, it } = require('mocha');
 import { expect, assert } from 'chai';
 import {
-  TaxRate, TaxRates, TaxScheme, PayrollTaxRates,
-  IncomeCategory, IncomeBracket, FilingStatus,
+  TaxRate, TaxScheme, PayrollTaxRates,
+  IncomeCategory, IncomeBracket,
 } from '../types/taxTypes';
 
 import {
-  calculateTax,
   calculatePayrollTax,
   calculateStatusRevenue,
   calculateAllBracketsRevenue,
   calculateSingleBracketRevenue,
-  calculateTaxpayerRevenue,
-  calculateSpecificTaxPayerRevenue,
 } from './taxCalc';
 
 import defaultRates from '../data/rates.json';
@@ -208,7 +205,7 @@ describe('tax calc tests', () => {
     });
   });
 
-  describe('single taxpayer revenue', () => {
+  describe.skip('single taxpayer revenue', () => {
     it('can calculate revenue for an average taxpayer', () => {
       throw new Error('not implemented');
     });

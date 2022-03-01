@@ -62,7 +62,7 @@ export default function PlanSelect() {
         .from('tax_plans')
         .delete()
         .match({ id: currentPlan.id })
-        .then((res) => {
+        .then(() => {
           removeLocalPlan(currentPlanIndex);
         });
     } else {
