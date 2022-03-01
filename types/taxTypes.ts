@@ -27,11 +27,11 @@ export interface TaxScheme {
 
 export interface TaxPlan {
   id: number;
-  hash: string;
   user_id: string | null;
   title: string | null;
   description: string | null;
   scheme: TaxScheme;
+  created_at: string;
 }
 
 export interface IncomeCategory {

@@ -3,8 +3,14 @@ import useStore from '../utils/useStore';
 import { formatBigMoney } from '@/utils/formatters';
 
 export default function AdvancedBuilder({ close }: {close: () => void}) {
-  const rates = useStore(state => state.rates);
+  const rates = useStore(state => state.currentPlan()?.scheme);
+  const plan = useStore(state => state.currentPlan());
+  const setCurrentPlan = useStore(state => state.setCurrentPlan);
+
   const setRates = useStore(state => state.setRates);
+
+  const setTitle = (newTitle: string) => setCurrentPlan({ ...plan, title: newTitle });
+  const setDescription = (newDescription: string) => setCurrentPlan({ ...plan, description: newDescription });
 
   const adjustGainsRate = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
@@ -32,15 +38,40 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
     setRates(newRates);
   };
 
+  if (!plan) {
+    return null;
+  }
+
   return (
     <div className="rounded-lg  border-indigo-500 bg-indigo-600 bg-opacity-50 p-3 flex flex-col flex-shrink-0">
       <div className="flex justify-between items-start text-left">
-        <h5>Advanced Options</h5>
+        <h5>Plan Settings</h5>
         <button className="text-yellow-500 ml-5">
           <i className="fas fa-times" onClick={close} />
         </button>
       </div>
       <form className="text-left">
+        <fieldset>
+          <div>
+            <label className="block">Title</label>
+            <input
+              type="text"
+              className="w-full"
+              value={plan.title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div className="my-5">
+            <label className="block">Description</label>
+            <textarea
+              className="w-full"
+              value={plan.description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+        </fieldset>
         <fieldset className="border border-indigo-500 rounded-md px-5 py-2">
           <legend className="px-1">
             Capital Gains

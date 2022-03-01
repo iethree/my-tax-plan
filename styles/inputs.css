@@ -1,9 +1,10 @@
 
 
-input  {
+input, textarea  {
   @apply bg-inherit border-b outline-none;
 
   &:focus, &:active {
+    @apply outline-none;
     margin-bottom: -1px;
     border-bottom: 2px solid;
   }

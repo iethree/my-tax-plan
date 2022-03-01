@@ -115,7 +115,8 @@ export function calculateSpecificTaxPayerRevenue(income: number, status: FilingS
   const amtTax: number = incomeCategory.avgAMT * incomeRatio;
   const credits: number = incomeCategory.avgCredits * incomeRatio;
 
-  return (incomeTax + gainsTax + amtTax + payrollTax) - credits;
+  const totalRevenue = (incomeTax + gainsTax + amtTax + payrollTax) - credits;
+  return totalRevenue > 0 ? totalRevenue : 0;
 }
 
 // calculate tax revenue for all taxpayers in this status
@@ -142,7 +143,7 @@ export function calculateAllBracketsRevenue(rates: TaxScheme): number {
     (acc: number, curr: IncomeBracket) => acc + calculateSingleBracketRevenue(rates, curr), 0
   );
 
-  return totalRevenue;
+  return totalRevenue > 0 ? totalRevenue : 0;
 }
 
 function filterIncomesOver(rates: TaxRate[], maxIncome: number) {

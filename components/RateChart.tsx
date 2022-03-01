@@ -8,6 +8,7 @@ import { calculateTaxRevenue } from '@/utils/taxCalc';
 import useStore from '../utils/useStore';
 import { formatBigMoney, formatPercent } from '@/utils/formatters';
 import ResultWidget from './ResultWidget';
+import { newPlan } from '@/constants/taxPlans';
 
 const formatters = {
   revenue: formatBigMoney,
@@ -16,9 +17,12 @@ const formatters = {
 
 export default function BracketChart() {
   const {
-    rates, setRates,
+    setRates,
     setTaxRevenue,
+    currentPlan,
   } = useStore();
+
+  const rates = currentPlan()?.scheme;
 
   const adjust = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
@@ -71,8 +75,13 @@ export default function BracketChart() {
   }
 
   useEffect(() => {
-    setTaxRevenue(calculateTaxRevenue(rates));
+    rates && setTaxRevenue(calculateTaxRevenue(rates));
   }, [rates, setTaxRevenue]);
+
+  if (!rates) {
+    // TODO empty state
+    return <EmptyRateChart />;
+  }
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -169,6 +178,27 @@ function RateChangeWidget({ adjust }: { adjust: Function }) {
       </button>
       <button className="block hover:bg-emerald-500 px-1" onClick={() => adjust(-0.01)}>
         <i className="fas fa-chevron-down" />
+      </button>
+    </div>
+  );
+}
+
+function EmptyRateChart() {
+  const plans = useStore((store) => store.plans);
+  const setPlans = useStore(state => state.setPlans);
+
+  const addPlan = () => {
+    setPlans([...plans, newPlan()]);
+  };
+
+  return (
+    <div className="h-[calc(100vh-200px)] flex flex-col justify-center pb-40">
+      <div>
+        Get started by creating a new tax plan
+      </div>
+      <button className="button green mt-10" onClick={addPlan}>
+        <i className="fas fa-chart-column mr-2" />
+        Create a Tax Plan
       </button>
     </div>
   );
