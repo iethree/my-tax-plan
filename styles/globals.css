@@ -35,3 +35,24 @@ p {
 * {
   box-sizing: border-box;
 }
+
+/* width */
+::-webkit-scrollbar {
+  @apply w-2 bg-black bg-opacity-20 rounded-lg;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply rounded-md bg-indigo-600 ;
+  background-clip: padding-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-indigo-500;
+}

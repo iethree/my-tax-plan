@@ -244,5 +244,6 @@
         "max": 999999999999
       }
     ]
-  }
+  },
+  "gainsAsIncome": false
 }

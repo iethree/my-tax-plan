@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { supabase } from '@/utils/api';
+import useStore from '@/utils/useStore';
 
 const NavLink = ({ href, children }: { href: string, children: any}) => {
   const router =  useRouter();
@@ -45,14 +47,16 @@ const NavBar: NextPage = () => {
           onClick={() => setShowMobileMenu(false)}
           className="fixed top-0 right-0 mt-10 p-5 bg-indigo-900 flex flex-col h-48 justify-between items-center z-40 rounded-b-lg shadow-lg"
         >
-          <NavLinks />
+          {/* <NavLinks /> */}
         </div>
       )}
     </nav>
   )
 }
 
-function NavLinks() {
+export function NavLinks() {
+  const user = useStore(state => state.user);
+
   return (
     <>
       <NavLink href="/build">
@@ -64,8 +68,16 @@ function NavLinks() {
       <NavLink href="/about">
         About
       </NavLink>
+      {!!user && (
+        <button
+          className="text-lg text-indigo-400 mx-3"
+          onClick={() => supabase.auth.signOut()}
+        >
+          Logout
+        </button>
+      )}
     </>
   );
 }
 
-export default NavBar
+export default NavBar;

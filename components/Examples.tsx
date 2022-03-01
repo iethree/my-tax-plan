@@ -5,7 +5,11 @@ import useStore from '../utils/useStore';
 const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));import { formatPercent } from "@/utils/formatters";
 
 export default function Examples() {
-  const scheme : TaxScheme = useStore(state => state.rates);
+  const scheme : TaxScheme = useStore(state => state.currentPlan()?.scheme);
+
+  if (!scheme) {
+    return null;
+  }
   return (
     <div className="flex flex-col">
       <div>
@@ -84,6 +88,7 @@ function Example (
           label="my plan"
           value={`$${tax.toLocaleString()} (${formatPercent(tax / income)})`}
         />
+
         <LabeledData
           label=""
           value={`${change >= 0 ? '+' : ''}${formatPercent(change)}`}

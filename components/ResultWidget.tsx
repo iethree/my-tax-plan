@@ -9,6 +9,7 @@ const baseline = calculateTaxRevenue(defaultRates);
 
 export default function ResultWidget() {
   const revenue = useStore(state => state.taxRevenue);
+
   const change = (revenue - baseline) / baseline;
   return (
     <div className="bg-indigo-600 rounded-lg px-5 py-2 mt-5 flex w-48 md:w-64 items-center justify-around">
