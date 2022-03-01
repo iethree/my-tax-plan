@@ -47,7 +47,7 @@ const NavBar: NextPage = () => {
           onClick={() => setShowMobileMenu(false)}
           className="fixed top-0 right-0 mt-10 p-5 bg-indigo-900 flex flex-col h-48 justify-between items-center z-40 rounded-b-lg shadow-lg"
         >
-          {/* <NavLinks /> */}
+          <NavLinks />
         </div>
       )}
     </nav>
