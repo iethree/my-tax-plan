@@ -21,7 +21,7 @@ const Builder: NextPage = () => {
       </Head>
       <div className="p-3 mx-auto text-center w-full md:max-h-[calc(100vh-100px)] overflow-hidden flex flex-col relative">
         {!!plans?.length && (
-          <div className="absolute top-0 right-0 md:left-0 p-5 md:flex">
+          <div className="absolute top-0 right-0 lg:left-0 p-5 md:flex">
             <div className="flex">
               <button
                 title="advanced options"
@@ -39,7 +39,7 @@ const Builder: NextPage = () => {
             </div>
           </div>
         )}
-        <h2 className="text-yellow-500 text-left md:text-center mb-10 md:mb-2">
+        <h2 className="text-yellow-500 text-left lg:text-center mb-10 md:mb-2">
           Builder
         </h2>
         <div className="block md:flex overflow-hidden justify-around min-content">
