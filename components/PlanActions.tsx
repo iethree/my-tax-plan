@@ -17,7 +17,7 @@ export default function PlanSelect() {
   const setCurrentPlan = useStore(state => state.setCurrentPlan);
   const currentPlanIndex = useStore(state => state.currentPlanIndex);
   const setCurrentPlanIndex = useStore(state => state.setCurrentPlanIndex);
-  const user: null | User = useStore(state => state.user);
+  const user: null | User = useStore(state => state.user) as null | User;
   const LoginModal = useModal(LoginScreen);
 
   const addPlan = () => {

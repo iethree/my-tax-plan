@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 import useStore from '../utils/useStore';
 import { formatBigMoney } from '@/utils/formatters';
+import { TaxRate } from '@/types/taxTypes';
 
 export default function AdvancedBuilder({ close }: {close: () => void}) {
   const rates = useStore(state => state.currentPlan()?.scheme);
@@ -89,7 +90,7 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
 
 
           <fieldset className="inline-block mt-2" disabled={!!rates.gainsAsIncome}>
-            {rates.gains.single.map((r, i) => (
+            {rates.gains.single.map((r: TaxRate, i: number) => (
               <label key={i} className="mb-2 flex justify-end items-end">
                 <span className="mr-2">
                   {formatBigMoney(r.min)}{i === rates.gains.single.length - 1 ? '+' : ' - ' + formatBigMoney(r.max)}
@@ -119,7 +120,7 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
             <strong className="text-yellow-500">
               Social Security
             </strong>
-            {rates.payroll.socialSecurity.map((r, i) => (
+            {rates.payroll.socialSecurity.map((r: TaxRate, i: number) => (
               <label key={r.min} className="mb-2 flex justify-end items-end">
                 <span className="mr-2">
                   {formatBigMoney(r.min)}{i === rates.payroll.socialSecurity.length - 1 ? '+' : ' - ' + formatBigMoney(r.max)}
@@ -141,7 +142,7 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
             <strong className="text-yellow-500">
               Medicare
             </strong>
-            {rates.payroll.medicare.map((r, i) => (
+            {rates.payroll.medicare.map((r: TaxRate, i: number) => (
               <label key={r.min} className="mb-2 flex justify-end items-end">
                 <span className="mr-2">
                   {formatBigMoney(r.min)}{i === rates.payroll.medicare.length - 1 ? '+' : ' - ' + formatBigMoney(r.max)}

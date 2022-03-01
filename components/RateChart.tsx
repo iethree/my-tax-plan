@@ -3,6 +3,7 @@ import {
   ResponsiveContainer, ComposedChart, XAxis, YAxis, Area,
   Tooltip, LabelList, Label, Bar, Legend,
 } from 'recharts';
+import { TaxRate } from '@/types/taxTypes';
 import colors from 'tailwindcss/colors';
 import { calculateTaxRevenue } from '@/utils/taxCalc';
 import useStore from '../utils/useStore';
@@ -42,7 +43,7 @@ export default function BracketChart() {
 
   function handleBarDrag(chartEvent: any) {
     const { rate: startingRate } = chartEvent.payload;
-    const rateIndex = rates.income.single.findIndex((bracket) => bracket.rate === startingRate);
+    const rateIndex = rates.income.single.findIndex((bracket: TaxRate) => bracket.rate === startingRate);
     let startYPos: number | null = null;
 
     const mouseMove = (mouseEvent: any) => {
@@ -159,7 +160,7 @@ export default function BracketChart() {
         </ResponsiveContainer>
       </div>
       <div className="flex justify-around mx-auto w-full">
-        {rates.income.single.map((rate, index) => (
+        {rates.income.single.map((rate: TaxRate, index: number) => (
           <RateChangeWidget
             key={rate.max}
             adjust={((amount: number) => adjust(index, amount))}
