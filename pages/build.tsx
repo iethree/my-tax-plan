@@ -63,7 +63,7 @@ const Builder: NextPage = () => {
           <div className="flex flex-col w-full md:w-1/2 2xl:w-1/2 ">
             <RateChart rates={currentPlan?.scheme} setRates={setRates} />
           </div>
-          <Examples />
+          <Examples scheme={currentPlan?.scheme} />
         </div>
       </div>
     </div>
