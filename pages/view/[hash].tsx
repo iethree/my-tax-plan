@@ -67,7 +67,7 @@ const Viewer: NextPage = () => {
           <div className="flex flex-col w-full md:w-1/2 2xl:w-1/2 ">
             <RateChart rates={plan.scheme} />
           </div>
-          <Examples />
+          <Examples scheme={plan.scheme} />
         </div>
       </div>
     </div>

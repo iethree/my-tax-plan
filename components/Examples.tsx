@@ -1,13 +1,10 @@
-import { FilingStatus, TaxScheme } from "@/types/taxTypes";
+import type { FilingStatus, TaxScheme } from "@/types/taxTypes";
 import { calculateSpecificTaxPayerRevenue } from "@/utils/taxCalc";
 import jsonRates from "../data/rates.json";
-import useStore from "../utils/useStore";
 const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));
 import { formatPercent } from "@/utils/formatters";
 
-export default function Examples() {
-  const scheme: TaxScheme = useStore((state) => state.currentPlan()?.scheme);
-
+export default function Examples({ scheme }: { scheme: TaxScheme }) {
   if (!scheme) {
     return null;
   }
