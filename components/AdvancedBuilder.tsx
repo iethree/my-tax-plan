@@ -1,17 +1,19 @@
-import { ChangeEvent } from 'react';
-import useStore from '../utils/useStore';
-import { formatBigMoney } from '@/utils/formatters';
-import { TaxRate } from '@/types/taxTypes';
+import { ChangeEvent } from "react";
+import useStore from "../utils/useStore";
+import { formatBigMoney } from "@/utils/formatters";
+import { TaxRate } from "@/types/taxTypes";
 
-export default function AdvancedBuilder({ close }: {close: () => void}) {
-  const rates = useStore(state => state.currentPlan()?.scheme);
-  const plan = useStore(state => state.currentPlan());
-  const setCurrentPlan = useStore(state => state.setCurrentPlan);
+export default function AdvancedBuilder({ close }: { close: () => void }) {
+  const rates = useStore((state) => state.currentPlan()?.scheme);
+  const plan = useStore((state) => state.currentPlan());
+  const setCurrentPlan = useStore((state) => state.setCurrentPlan);
 
-  const setRates = useStore(state => state.setRates);
+  const setRates = useStore((state) => state.setRates);
 
-  const setTitle = (newTitle: string) => setCurrentPlan({ ...plan, title: newTitle });
-  const setDescription = (newDescription: string) => setCurrentPlan({ ...plan, description: newDescription });
+  const setTitle = (newTitle: string) =>
+    setCurrentPlan({ ...plan, title: newTitle });
+  const setDescription = (newDescription: string) =>
+    setCurrentPlan({ ...plan, description: newDescription });
 
   const adjustGainsRate = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
@@ -27,7 +29,11 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
     setRates(newRates);
   };
 
-  const adjustPayrollRate = (type: 'socialSecurity' | 'medicare', bracketIndex: number, amount: number) => {
+  const adjustPayrollRate = (
+    type: "socialSecurity" | "medicare",
+    bracketIndex: number,
+    amount: number
+  ) => {
     const newRates = { ...rates };
     if (amount < 0) {
       newRates.payroll[type][bracketIndex].rate = 0;
@@ -71,40 +77,47 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
-
         </fieldset>
         <fieldset className="border border-indigo-500 rounded-md px-5 py-2">
-          <legend className="px-1">
-            Capital Gains
-          </legend>
+          <legend className="px-1">Capital Gains</legend>
 
           <label className="flex items-center">
             <input
               type="checkbox"
               className="mr-2"
               checked={!!rates.gainsAsIncome}
-              onChange={(e) => setRates(({...rates, gainsAsIncome: !!e.target.checked}))}
+              onChange={(e) =>
+                setRates({ ...rates, gainsAsIncome: !!e.target.checked })
+              }
             />
             Tax gains as income
           </label>
 
-
-          <fieldset className="inline-block mt-2" disabled={!!rates.gainsAsIncome}>
+          <fieldset
+            className="inline-block mt-2"
+            disabled={!!rates.gainsAsIncome}
+          >
             {rates.gains.single.map((r: TaxRate, i: number) => (
               <label key={i} className="mb-2 flex justify-end items-end">
                 <span className="mr-2">
-                  {formatBigMoney(r.min)}{i === rates.gains.single.length - 1 ? '+' : ' - ' + formatBigMoney(r.max)}
+                  {formatBigMoney(r.min)}
+                  {i === rates.gains.single.length - 1
+                    ? "+"
+                    : " - " + formatBigMoney(r.max)}
                 </span>
                 <span>
                   <input
                     type="number"
                     className="text-right mx-1 w-14"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { adjustGainsRate(i, Number(e.target.value) / 100) }}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      adjustGainsRate(i, Number(e.target.value) / 100);
+                    }}
                     max={100}
                     min={0}
-                    step={.1}
+                    step={0.1}
                     value={Math.round(r.rate * 10000) / 100}
-                  />%
+                  />
+                  %
                 </span>
               </label>
             ))}
@@ -112,51 +125,65 @@ export default function AdvancedBuilder({ close }: {close: () => void}) {
         </fieldset>
 
         <fieldset className="border border-indigo-500 rounded-md px-5 py-2">
-          <legend className="px-1">
-            Payroll Taxes
-          </legend>
+          <legend className="px-1">Payroll Taxes</legend>
 
           <fieldset className="inline-block">
-            <strong className="text-yellow-500">
-              Social Security
-            </strong>
+            <strong className="text-yellow-500">Social Security</strong>
             {rates.payroll.socialSecurity.map((r: TaxRate, i: number) => (
               <label key={r.min} className="mb-2 flex justify-end items-end">
                 <span className="mr-2">
-                  {formatBigMoney(r.min)}{i === rates.payroll.socialSecurity.length - 1 ? '+' : ' - ' + formatBigMoney(r.max)}
+                  {formatBigMoney(r.min)}
+                  {i === rates.payroll.socialSecurity.length - 1
+                    ? "+"
+                    : " - " + formatBigMoney(r.max)}
                 </span>
                 <span>
                   <input
                     type="number"
                     className="text-right mx-2 w-14"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { adjustPayrollRate('socialSecurity', i, Number(e.target.value) / 100) }}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      adjustPayrollRate(
+                        "socialSecurity",
+                        i,
+                        Number(e.target.value) / 100
+                      );
+                    }}
                     max={100}
                     min={0}
-                    step={.05}
+                    step={0.05}
                     value={Math.round(r.rate * 100 * 100) / 100}
-                  />%
+                  />
+                  %
                 </span>
               </label>
             ))}
 
-            <strong className="text-yellow-500">
-              Medicare
-            </strong>
+            <strong className="text-yellow-500">Medicare</strong>
             {rates.payroll.medicare.map((r: TaxRate, i: number) => (
               <label key={r.min} className="mb-2 flex justify-end items-end">
                 <span className="mr-2">
-                  {formatBigMoney(r.min)}{i === rates.payroll.medicare.length - 1 ? '+' : ' - ' + formatBigMoney(r.max)}
+                  {formatBigMoney(r.min)}
+                  {i === rates.payroll.medicare.length - 1
+                    ? "+"
+                    : " - " + formatBigMoney(r.max)}
                 </span>
                 <span>
                   <input
                     type="number"
                     className="text-right mx-2 w-14"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { adjustPayrollRate('medicare', i, Number(e.target.value) / 100) }}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      adjustPayrollRate(
+                        "medicare",
+                        i,
+                        Number(e.target.value) / 100
+                      );
+                    }}
                     max={100}
                     min={0}
-                    step={.05}
+                    step={0.05}
                     value={Math.round(r.rate * 100 * 100) / 100}
-                  />%
+                  />
+                  %
                 </span>
               </label>
             ))}

@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import type { NextPage } from 'next';
+import { useState } from "react";
+import type { NextPage } from "next";
 
-import useStore from '@/utils/useStore';
+import useStore from "@/utils/useStore";
 
-import PlanSelect from '@/components/PlanSelect';
-import PlanActions from '@/components/PlanActions';
-import Head from 'next/head';
-import RateChart from '@/components/RateChart';
-import Examples from '@/components/Examples';
-import AdvancedBuilder from '@/components/AdvancedBuilder';
+import PlanSelect from "@/components/PlanSelect";
+import PlanActions from "@/components/PlanActions";
+import Head from "next/head";
+import RateChart from "@/components/RateChart";
+import Examples from "@/components/Examples";
+import AdvancedBuilder from "@/components/AdvancedBuilder";
 
 const Builder: NextPage = () => {
   const [showOptions, setShowOptions] = useState(false);
-  const plans = useStore(state => state.plans);
+  const plans = useStore((state) => state.plans);
+  const currentPlan = useStore((state) => state.currentPlan());
+  const setRates = useStore((state) => state.setRates);
 
   return (
     <div className="flex flex-col justify-around mx-auto">
@@ -26,7 +28,7 @@ const Builder: NextPage = () => {
               <button
                 title="advanced options"
                 className="button yellow small"
-                onClick={() => setShowOptions(v => !v)}
+                onClick={() => setShowOptions((v) => !v)}
               >
                 <i className="fas fa-wrench" />
               </button>
@@ -43,15 +45,17 @@ const Builder: NextPage = () => {
           Builder
         </h2>
         <div className="block md:flex overflow-hidden justify-around min-content">
-          {showOptions && <AdvancedBuilder close={() => setShowOptions(false)}/>}
+          {showOptions && (
+            <AdvancedBuilder close={() => setShowOptions(false)} />
+          )}
           <div className="flex flex-col w-full md:w-1/2 2xl:w-1/2 ">
-            <RateChart />
+            <RateChart rates={currentPlan?.scheme} setRates={setRates} />
           </div>
           <Examples />
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Builder
+export default Builder;

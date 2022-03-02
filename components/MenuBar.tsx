@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { supabase } from '@/utils/api';
-import useStore from '@/utils/useStore';
+import { useState } from "react";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { supabase } from "@/utils/api";
+import useStore from "@/utils/useStore";
 
-const NavLink = ({ href, children }: { href: string, children: any}) => {
-  const router =  useRouter();
+const NavLink = ({ href, children }: { href: string; children: any }) => {
+  const router = useRouter();
   const active = router?.pathname === href;
 
   return (
     <Link href={href} as={href}>
-      <a className={`text-lg text-yellow-500 hover:text-yellow-600 mx-3 ${active ? 'underline' : 'no-underline'}`}>
+      <a
+        className={`text-lg text-yellow-500 hover:text-yellow-600 mx-3 ${
+          active ? "underline" : "no-underline"
+        }`}
+      >
         {children}
       </a>
     </Link>
@@ -36,11 +40,10 @@ const NavBar: NextPage = () => {
 
         <button
           className="block md:hidden text-yellow-500 hover:text-yellow-600"
-          onClick={() => setShowMobileMenu(show => !show)}
+          onClick={() => setShowMobileMenu((show) => !show)}
         >
           <i className="fas fa-bars mr-2 fa-xl" />
         </button>
-
       </div>
       {showMobileMenu && (
         <div
@@ -51,23 +54,17 @@ const NavBar: NextPage = () => {
         </div>
       )}
     </nav>
-  )
-}
+  );
+};
 
 export function NavLinks() {
-  const user = useStore(state => state.user);
+  const user = useStore((state) => state.user);
 
   return (
     <>
-      <NavLink href="/build">
-        Builder
-      </NavLink>
-      <NavLink href="/budget">
-        Budget
-      </NavLink>
-      <NavLink href="/about">
-        About
-      </NavLink>
+      <NavLink href="/build">Builder</NavLink>
+      <NavLink href="/budget">Budget</NavLink>
+      <NavLink href="/about">About</NavLink>
       {!!user && (
         <button
           className="text-lg text-indigo-400 mx-3"

@@ -1,6 +1,6 @@
 // pages/_document.js
 
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
@@ -27,9 +27,8 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <footer className="text-center text-gray-200">
-        </footer>
+        <footer className="text-center text-gray-200"></footer>
       </body>
     </Html>
-  )
+  );
 }

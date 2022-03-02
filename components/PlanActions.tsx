@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { TaxPlan } from '@/types/taxTypes';
-import useStore from '@/utils/useStore';
-import LoginScreen from '@/components/LoginScreen';
-import { useModal } from '@ebay/nice-modal-react';
-import { supabase } from '@/utils/api';
-import { newPlan } from '@/constants/taxPlans';
-import { User } from '@supabase/supabase-js';
-import Spinner from '@/components/Spinner';
+import { useState } from "react";
+import { TaxPlan } from "@/types/taxTypes";
+import useStore from "@/utils/useStore";
+import LoginScreen from "@/components/LoginScreen";
+import { useModal } from "@ebay/nice-modal-react";
+import { supabase } from "@/utils/api";
+import { newPlan } from "@/constants/taxPlans";
+import { User } from "@supabase/supabase-js";
+import Spinner from "@/components/Spinner";
 
 export default function PlanSelect() {
-  const plans: TaxPlan[] = useStore(state => state.plans);
-  const setPlans = useStore(state => state.setPlans);
+  const plans: TaxPlan[] = useStore((state) => state.plans);
+  const setPlans = useStore((state) => state.setPlans);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const currentPlan = useStore(state => state.currentPlan());
-  const setCurrentPlan = useStore(state => state.setCurrentPlan);
-  const currentPlanIndex = useStore(state => state.currentPlanIndex);
-  const setCurrentPlanIndex = useStore(state => state.setCurrentPlanIndex);
-  const user: null | User = useStore(state => state.user) as null | User;
+  const currentPlan = useStore((state) => state.currentPlan());
+  const setCurrentPlan = useStore((state) => state.setCurrentPlan);
+  const currentPlanIndex = useStore((state) => state.currentPlanIndex);
+  const setCurrentPlanIndex = useStore((state) => state.setCurrentPlanIndex);
+  const user: null | User = useStore((state) => state.user) as null | User;
   const LoginModal = useModal(LoginScreen);
 
   const addPlan = () => {
@@ -38,12 +38,14 @@ export default function PlanSelect() {
     }
 
     supabase
-      .from('tax_plans')
-      .upsert([{
-        ...savePlan,
-      }])
+      .from("tax_plans")
+      .upsert([
+        {
+          ...savePlan,
+        },
+      ])
       .then((res) => {
-        setLoading(false)
+        setLoading(false);
         if (!res.error && res.data.length) {
           const newPlan = res.data[0];
           setCurrentPlan(newPlan);
@@ -59,7 +61,7 @@ export default function PlanSelect() {
   const deleteCurrentPlan = async () => {
     if (currentPlan.created_at) {
       supabase
-        .from('tax_plans')
+        .from("tax_plans")
         .delete()
         .match({ id: currentPlan.id })
         .then(() => {
@@ -68,7 +70,7 @@ export default function PlanSelect() {
     } else {
       removeLocalPlan(currentPlanIndex);
     }
-  }
+  };
 
   if (!plans.length) {
     return null;
@@ -77,7 +79,11 @@ export default function PlanSelect() {
   return (
     <div className="text-right">
       {!user?.id ? (
-        <button id="login-modal" className="button small" onClick={() => LoginModal.show()}>
+        <button
+          id="login-modal"
+          className="button small"
+          onClick={() => LoginModal.show()}
+        >
           <i className="fas fa-right-to-bracket mr-2" />
           Login to save
         </button>
@@ -90,15 +96,26 @@ export default function PlanSelect() {
             onClick={saveCurrentPlan}
             disabled={loading}
           >
-            {!loading
-              ? <i className="fas fa-save" />
-              : <Spinner className="w-4 h-4" />
-            }
+            {!loading ? (
+              <i className="fas fa-save" />
+            ) : (
+              <Spinner className="w-4 h-4" />
+            )}
           </button>
-          <button id="delete-plan" className="button small ml-3" title="delete plan" onClick={deleteCurrentPlan}>
+          <button
+            id="delete-plan"
+            className="button small ml-3"
+            title="delete plan"
+            onClick={deleteCurrentPlan}
+          >
             <i className="fas fa-trash" />
           </button>
-          <button id="add-plan" className="button small ml-3" title="add plan" onClick={addPlan}>
+          <button
+            id="add-plan"
+            className="button small ml-3"
+            title="add plan"
+            onClick={addPlan}
+          >
             <i className="fas fa-plus" />
           </button>
         </>

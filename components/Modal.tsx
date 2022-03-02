@@ -1,9 +1,15 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, ReactNode } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, ReactNode } from "react";
 
-export default function Modal(
-  { children, title, closeModal }: { children: ReactNode, title?: string, closeModal?: () => void }
-) {
+export default function Modal({
+  children,
+  title,
+  closeModal,
+}: {
+  children: ReactNode;
+  title?: string;
+  closeModal?: () => void;
+}) {
   return (
     <>
       <div
@@ -46,14 +52,17 @@ export default function Modal(
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-gray-800 shadow-xl rounded-md">
-                <button onClick={closeModal} className="absolute top-0 right-0 p-5">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-0 right-0 p-5"
+                >
                   <i className="fas fa-times hover:text-yellow-500" />
                 </button>
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-bold leading-6 text-inherit"
                 >
-                  {title || ''}
+                  {title || ""}
                 </Dialog.Title>
                 {children}
               </div>
@@ -62,5 +71,5 @@ export default function Modal(
         </Dialog>
       </Transition>
     </>
-  )
+  );
 }
