@@ -1,20 +1,19 @@
 import { FilingStatus, TaxScheme } from "@/types/taxTypes";
 import { calculateSpecificTaxPayerRevenue } from "@/utils/taxCalc";
-import jsonRates from '../data/rates.json';
-import useStore from '../utils/useStore';
-const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));import { formatPercent } from "@/utils/formatters";
+import jsonRates from "../data/rates.json";
+import useStore from "../utils/useStore";
+const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));
+import { formatPercent } from "@/utils/formatters";
 
 export default function Examples() {
-  const scheme : TaxScheme = useStore(state => state.currentPlan()?.scheme);
+  const scheme: TaxScheme = useStore((state) => state.currentPlan()?.scheme);
 
   if (!scheme) {
     return null;
   }
   return (
     <div className="flex flex-col">
-      <div>
-        under your plan...
-      </div>
+      <div>under this plan...</div>
       <div className="flex-1 overflow-y-auto">
         <div className="grid sm:grid-cols-2 md:grid-cols-1 2xl:grid-cols-2 min-conent">
           <Example
@@ -64,22 +63,35 @@ export default function Examples() {
   );
 }
 
-
-function Example (
-  { scheme, title, income, filingStatus, icon}:
-  { scheme: TaxScheme, title: string, income: number, filingStatus: FilingStatus, icon?: string}
-) {
-
-  const tax = Math.round(calculateSpecificTaxPayerRevenue(income, filingStatus, scheme));
-  const baseTax = Math.round(calculateSpecificTaxPayerRevenue(income, filingStatus, defaultRates));
+function Example({
+  scheme,
+  title,
+  income,
+  filingStatus,
+  icon,
+}: {
+  scheme: TaxScheme;
+  title: string;
+  income: number;
+  filingStatus: FilingStatus;
+  icon?: string;
+}) {
+  const tax = Math.round(
+    calculateSpecificTaxPayerRevenue(income, filingStatus, scheme)
+  );
+  const baseTax = Math.round(
+    calculateSpecificTaxPayerRevenue(income, filingStatus, defaultRates)
+  );
   const change = (tax - baseTax) / baseTax;
 
   return (
     <div className="m-5 bg-indigo-600 rounded-lg p-3 shadow-lg shadow-gray-900">
       <div className="flex items-center text-2xl">
-        <i className={`fas fa-${icon || 'user'} fa-2x fa-fw text-indigo-300`} />
+        <i className={`fas fa-${icon || "user"} fa-2x fa-fw text-indigo-300`} />
         <div className="text-left leading-tight mx-auto">
-          <div>{title} <br />@ ${income.toLocaleString()}/yr</div>
+          <div>
+            {title} <br />@ ${income.toLocaleString()}/yr
+          </div>
         </div>
       </div>
       <div className="flex justify-between items-center pt-2 mt-3 border-t">
@@ -91,14 +103,20 @@ function Example (
 
         <LabeledData
           label=""
-          value={`${change >= 0 ? '+' : ''}${formatPercent(change)}`}
+          value={`${change >= 0 ? "+" : ""}${formatPercent(change)}`}
         />
       </div>
     </div>
   );
 }
 
-function LabeledData({ label, value }: { label: string, value: string | number }) {
+function LabeledData({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) {
   return (
     <div className="mx-5">
       <div className="text-xl font-bold">{value}</div>

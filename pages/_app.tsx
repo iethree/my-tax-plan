@@ -1,18 +1,18 @@
-import { useEffect } from 'react';
-import '../styles/globals.css'
-import Layout from '../components/Layout'
-import type { AppProps } from 'next/app'
-import NiceModal from '@ebay/nice-modal-react';
-import useStore, { getLocalPlans } from '@/utils/useStore';
-import { supabase } from '@/utils/api';
-import { User } from '@supabase/supabase-js';
-import { newPlan } from '@/constants/taxPlans';
+import { useEffect } from "react";
+import "../styles/globals.css";
+import Layout from "../layout/Layout";
+import type { AppProps } from "next/app";
+import NiceModal from "@ebay/nice-modal-react";
+import useStore, { getLocalPlans } from "@/utils/useStore";
+import { supabase } from "@/utils/api";
+import { User } from "@supabase/supabase-js";
+import { newPlan } from "@/constants/taxPlans";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const updateUser = useStore(state => state.updateUser);
-  const user = useStore<null|User>(state => state.user);
-  const setPlans = useStore(state => state.setPlans);
-  const setCurrentPlanIndex = useStore(state => state.setCurrentPlanIndex);
+  const updateUser = useStore((state) => state.updateUser);
+  const user = useStore<null | User>((state) => state.user);
+  const setPlans = useStore((state) => state.setPlans);
+  const setCurrentPlanIndex = useStore((state) => state.setCurrentPlanIndex);
 
   useEffect(() => {
     updateUser();
@@ -28,15 +28,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (user?.id) {
       supabase
-        .from('tax_plans')
+        .from("tax_plans")
         .select()
-        .eq('user_id', user?.id)
+        .eq("user_id", user?.id)
         .then((res) => {
           if (res?.data?.length) {
-            setPlans([
-              ...res.data,
-              ...localPlans,
-            ]);
+            setPlans([...res.data, ...localPlans]);
           } else if (localPlans.length) {
             setPlans(localPlans);
           } else {

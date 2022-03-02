@@ -14,4 +14,3 @@ jobs:
         run: npm i --no-save
       - name: Lint JS
         run: npm run lint
-

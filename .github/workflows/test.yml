@@ -14,4 +14,3 @@ jobs:
         run: npm i --no-save
       - name: Run unit tests
         run: npm test
-

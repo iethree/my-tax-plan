@@ -1,15 +1,11 @@
 // pages/_document.js
 
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
     <Html>
       <Head>
-        <meta
-          name="description"
-          content="Revamp the federal tax system in minutes"
-        />
         <meta name="theme-color" content="#312e81" />
         <link rel="icon" href="/favicon.ico" />
         <link
@@ -27,9 +23,8 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <footer className="text-center text-gray-200">
-        </footer>
+        <footer className="text-center text-gray-200"></footer>
       </body>
     </Html>
-  )
+  );
 }
