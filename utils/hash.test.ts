@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { encode, decode } from "./hash";
 
-describe.only("hash utils", () => {
+describe("hash utils", () => {
   it("encodes a numerical id to a string hash", () => {
     expect(encode(8675309)).to.equal("pljqglx");
     expect(encode(1)).to.equal("aejb");
