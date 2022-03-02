@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { supabase } from "@/utils/api";
@@ -22,7 +21,7 @@ const NavLink = ({ href, children }: { href: string; children: any }) => {
   );
 };
 
-const NavBar: NextPage = () => {
+const NavBar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   return (

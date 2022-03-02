@@ -1,5 +1,5 @@
 import MenuBar from "@/components/MenuBar";
-import Footer from "@/components/Footer";
+import Footer from "@/layout/Footer";
 
 export default function Layout({ children }: { children: any }) {
   return (

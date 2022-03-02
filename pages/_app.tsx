@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "../styles/globals.css";
-import Layout from "../components/Layout";
+import Layout from "../layout/Layout";
 import type { AppProps } from "next/app";
 import NiceModal from "@ebay/nice-modal-react";
 import useStore, { getLocalPlans } from "@/utils/useStore";

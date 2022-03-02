@@ -9,6 +9,8 @@ import Head from "next/head";
 import RateChart from "@/components/RateChart";
 import Examples from "@/components/Examples";
 import AdvancedBuilder from "@/components/AdvancedBuilder";
+import CopyButton from "@/components/CopyButton";
+import { encode } from "@/utils/hash";
 
 const Builder: NextPage = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -32,6 +34,16 @@ const Builder: NextPage = () => {
               >
                 <i className="fas fa-wrench" />
               </button>
+              {currentPlan.created_at && (
+                <CopyButton
+                  content={`Check out my tax Plan: ${currentPlan.title}\n${
+                    window.location.origin
+                  }/view/${encode(currentPlan.id)}`}
+                  className="button small mx-2"
+                  icon="share-alt"
+                  title="Share Plan"
+                />
+              )}
               <div className="mx-2 md:w-48">
                 <PlanSelect />
               </div>

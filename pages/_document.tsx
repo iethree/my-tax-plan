@@ -6,10 +6,6 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <meta
-          name="description"
-          content="Revamp the federal tax system in minutes"
-        />
         <meta name="theme-color" content="#312e81" />
         <link rel="icon" href="/favicon.ico" />
         <link

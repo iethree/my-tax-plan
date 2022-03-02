@@ -6,10 +6,7 @@ import Alert from "@/components/Alert";
 import { useState } from "react";
 import Spinner from "./Spinner";
 
-type AlertMessage = {
-  level: "success" | "info" | "warning" | "error";
-  text: string;
-};
+import type { AlertMessage } from "@/types/appTypes";
 
 export default NiceModal.create(() => {
   const modal = useModal();
