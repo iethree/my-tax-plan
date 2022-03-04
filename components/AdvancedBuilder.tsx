@@ -50,7 +50,7 @@ export default function AdvancedBuilder({ close }: { close: () => void }) {
   }
 
   return (
-    <div className="rounded-lg border-indigo-500 bg-indigo-600 bg-opacity-50 p-3 flex flex-col flex-shrink-0 md:w-50">
+    <div className="rounded-lg border-indigo-500 bg-indigo-600 bg-opacity-50 p-3 flex flex-col flex-shrink-0 md:w-50 mx-2">
       <div className="flex justify-between items-start text-left">
         <h5>Plan Settings</h5>
         <button className="text-yellow-500 ml-5">
