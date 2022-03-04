@@ -12,7 +12,7 @@ export default function Examples({ scheme }: { scheme: TaxScheme }) {
     <div className="flex flex-col">
       <div>under this plan...</div>
       <div className="flex-1 overflow-y-auto">
-        <div className="grid sm:grid-cols-2 md:grid-cols-1 2xl:grid-cols-2 min-conent">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2 min-conent">
           <Example
             scheme={scheme}
             filingStatus="single"

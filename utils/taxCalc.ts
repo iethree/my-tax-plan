@@ -8,7 +8,8 @@ import {
 } from "@/types/taxTypes";
 
 import incomeJson from "../data/income.json";
-const incomes: IncomeBracket[] = incomeJson;
+// remove the 'all' bracket
+const actualIncomes: IncomeBracket[] = incomeJson.slice(1);
 
 /**
  * calculate the tax payable given taxable income and the given tax rates for a single taxpayer
@@ -111,9 +112,9 @@ export function calculateSpecificTaxPayerRevenue(
   status: FilingStatus,
   rates: TaxScheme
 ): number {
-  const incomeBracket: IncomeBracket | undefined = incomes
-    .slice(1)
-    .find((bracket) => income < (bracket.maxAgi || 0));
+  const incomeBracket: IncomeBracket | undefined = actualIncomes.find(
+    (bracket) => income < (bracket.maxAgi || 0)
+  );
 
   if (!incomeBracket) return 0;
 
@@ -180,45 +181,35 @@ export function calculateSingleBracketRevenue(
   );
 }
 
-export function calculateAllBracketsRevenue(rates: TaxScheme): number {
-  // don't calcualte the first index, which is all brackets
-  const totalRevenue = incomes
-    .slice(1)
-    .reduce(
-      (acc: number, curr: IncomeBracket) =>
-        acc + calculateSingleBracketRevenue(rates, curr),
-      0
-    );
+export function calculateAllBracketsRevenue(
+  rates: TaxScheme,
+  incomes: IncomeBracket[] = actualIncomes
+): number {
+  const totalRevenue = incomes.reduce(
+    (acc: number, curr: IncomeBracket) =>
+      acc + calculateSingleBracketRevenue(rates, curr),
+    0
+  );
 
   return totalRevenue > 0 ? totalRevenue : 0;
 }
 
-function filterIncomesOver(rates: TaxRate[], maxIncome: number) {
-  return rates.filter((bracket) => bracket.max <= maxIncome);
+// filter incomes by average taxable single income
+function filterIncomesOver(
+  incomes: IncomeBracket[],
+  maxIncome: number
+): IncomeBracket[] {
+  return incomes.filter(
+    (bracket) =>
+      bracket.minAgi !== null && bracket.single.avgTaxable <= maxIncome
+  );
 }
 
 export function calculateTaxRevenue(
   rates: TaxScheme,
-  maxIncome = 10000000000
+  maxIncome = null
 ): number {
-  const partialScheme: TaxScheme = {
-    ...rates,
-    income: {
-      single: filterIncomesOver(rates.income.single, maxIncome),
-      marriedFilingJointly: filterIncomesOver(
-        rates.income.marriedFilingJointly,
-        maxIncome
-      ),
-      marriedFilingSeparately: filterIncomesOver(
-        rates.income.marriedFilingSeparately,
-        maxIncome
-      ),
-      headOfHousehold: filterIncomesOver(
-        rates.income.headOfHousehold,
-        maxIncome
-      ),
-    },
-  };
+  const incomes = filterIncomesOver(actualIncomes, maxIncome || 99999999999);
 
-  return calculateAllBracketsRevenue(partialScheme);
+  return calculateAllBracketsRevenue(rates, incomes);
 }
