@@ -77,11 +77,11 @@ export default function PlanSelect() {
   }
 
   return (
-    <div className="text-right">
+    <>
       {!user?.id ? (
         <button
           id="login-modal"
-          className="button small"
+          className="button small green m-1"
           onClick={() => LoginModal.show()}
         >
           <i className="fas fa-right-to-bracket mr-2" />
@@ -91,7 +91,7 @@ export default function PlanSelect() {
         <>
           <button
             id="save-plan"
-            className="button small"
+            className="button small m-1"
             title="save plan"
             onClick={saveCurrentPlan}
             disabled={loading}
@@ -104,7 +104,7 @@ export default function PlanSelect() {
           </button>
           <button
             id="delete-plan"
-            className="button small ml-3"
+            className="button small m-1"
             title="delete plan"
             onClick={deleteCurrentPlan}
           >
@@ -112,7 +112,7 @@ export default function PlanSelect() {
           </button>
           <button
             id="add-plan"
-            className="button small ml-3"
+            className="button small m-1"
             title="add plan"
             onClick={addPlan}
           >
@@ -120,6 +120,6 @@ export default function PlanSelect() {
           </button>
         </>
       )}
-    </div>
+    </>
   );
 }

@@ -25,11 +25,14 @@ const Builder: NextPage = () => {
       </Head>
       <div className="p-3 mx-auto text-center w-full md:max-h-[calc(100vh-100px)] overflow-hidden flex flex-col relative">
         {!!plans?.length && (
-          <div className="absolute top-0 right-0 lg:left-0 p-5 md:flex">
+          <div className="flex flex-col sm:flex-row justify-center items-center mb-2">
+            <div className="mx-2 w-3/4 sm:w-48">
+              <PlanSelect />
+            </div>
             <div className="flex">
               <button
                 title="advanced options"
-                className="button yellow small"
+                className="button yellow small m-1"
                 onClick={() => setShowOptions((v) => !v)}
               >
                 <i className="fas fa-wrench" />
@@ -39,23 +42,16 @@ const Builder: NextPage = () => {
                   content={`Check out my tax Plan: ${currentPlan.title}\n${
                     window.location.origin
                   }/view/${encode(currentPlan.id)}`}
-                  className="button small mx-2"
+                  className="button small green m-1"
                   icon="share-alt"
                   title="Share Plan"
                 />
               )}
-              <div className="mx-2 md:w-48">
-                <PlanSelect />
-              </div>
-            </div>
-            <div className="ml-2">
               <PlanActions />
             </div>
           </div>
         )}
-        <h2 className="text-yellow-500 text-left lg:text-center mb-10 md:mb-2">
-          Builder
-        </h2>
+
         <div className="block md:flex overflow-hidden justify-around min-content">
           {showOptions && (
             <AdvancedBuilder close={() => setShowOptions(false)} />

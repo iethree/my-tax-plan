@@ -44,39 +44,36 @@ export default NiceModal.create(() => {
       {!message && (
         <form className="my-5">
           <p>Sign in via magic link with your email below</p>
-          <div className="flex">
-            <div>
-              <input
-                className="inputField"
-                type="email"
-                placeholder="Your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <button
-                type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLogin(email);
-                }}
-                className="button yellow small ml-5"
-                disabled={loading}
-              >
-                {!loading ? (
-                  <>
-                    <i className="fas fa-envelope mr-2" />
-                    <span>Send magic link</span>
-                  </>
-                ) : (
-                  <>
-                    <Spinner className="inline h-4 w-4 mr-2" />
-                    <span>sending</span>
-                  </>
-                )}
-              </button>
-            </div>
+          <div className="">
+            <input
+              className="w-full"
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <button
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogin(email);
+              }}
+              className="button yellow mt-5 w-full"
+              disabled={loading}
+            >
+              {!loading ? (
+                <>
+                  <i className="fas fa-envelope mr-2" />
+                  <span>Send magic link</span>
+                </>
+              ) : (
+                <>
+                  <Spinner className="inline h-4 w-4 mr-2" />
+                  <span>sending</span>
+                </>
+              )}
+            </button>
           </div>
         </form>
       )}

@@ -87,11 +87,7 @@ export default function BracketChart({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div
-        className={`h-[70vh] md:h-auto md:flex-1 relative ${
-          setRates ? "touch-none" : ""
-        }`}
-      >
+      <div className="h-[70vh] md:h-auto md:flex-1 relative">
         <div className="absolute top-0 left-0 mt-10 ml-5">
           <ResultWidget revenue={calculateTaxRevenue(rates)} />
         </div>
