@@ -4,7 +4,7 @@ import { calculateTaxRevenue } from "@/utils/taxCalc";
 import { formatBigMoney, formatPercent } from "@/utils/formatters";
 
 const defaultRates: TaxScheme = JSON.parse(JSON.stringify(jsonRates));
-const baseline = calculateTaxRevenue(defaultRates);
+const baseline = calculateTaxRevenue(defaultRates).total;
 
 export default function ResultWidget({ revenue }: { revenue: number }) {
   const change = (revenue - baseline) / baseline;

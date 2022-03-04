@@ -4,7 +4,12 @@ export interface TaxRate {
   max: number;
 }
 
-export type FilingStatus = 'all' | 'single' | 'marriedFilingJointly' | 'marriedFilingSeparately' | 'headOfHousehold';
+export type FilingStatus =
+  | "all"
+  | "single"
+  | "marriedFilingJointly"
+  | "marriedFilingSeparately"
+  | "headOfHousehold";
 
 export interface TaxRates {
   marriedFilingJointly: TaxRate[];
@@ -12,6 +17,14 @@ export interface TaxRates {
   headOfHousehold: TaxRate[];
   single: TaxRate[];
   [key: string]: TaxRate[];
+}
+
+export interface RevenueDetail {
+  total: number;
+  incomeTax: number;
+  gainsTax: number;
+  payrollTax: number;
+  credits: number;
 }
 
 export interface PayrollTaxRates {
@@ -63,4 +76,3 @@ export interface IncomeBracket {
   marriedFilingSeparately: IncomeCategory;
   headOfHousehold: IncomeCategory;
 }
-

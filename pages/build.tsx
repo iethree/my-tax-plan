@@ -23,7 +23,7 @@ const Builder: NextPage = () => {
       <Head>
         <title>My Tax Plan | Builder</title>
       </Head>
-      <div className="p-3 mx-auto text-center w-full md:max-h-[calc(100vh-100px)] overflow-hidden flex flex-col relative">
+      <div className="p-3 mx-auto text-center w-full lg:max-h-[calc(100vh-100px)] overflow-hidden flex flex-col relative">
         {!!plans?.length && (
           <div className="flex flex-col sm:flex-row justify-center items-center mb-2">
             <div className="mx-2 w-3/4 sm:w-48">
@@ -52,11 +52,11 @@ const Builder: NextPage = () => {
           </div>
         )}
 
-        <div className="block md:flex overflow-hidden justify-around min-content">
+        <div className="block lg:flex overflow-hidden justify-around min-content">
           {showOptions && (
             <AdvancedBuilder close={() => setShowOptions(false)} />
           )}
-          <div className="flex flex-col w-full md:w-1/2 2xl:w-1/2 ">
+          <div className="flex flex-col w-full lg:w-1/2 2xl:w-1/2 ">
             <RateChart rates={currentPlan?.scheme} setRates={setRates} />
           </div>
           <Examples scheme={currentPlan?.scheme} />

@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 import papa from 'papaparse';
 import fs from 'fs';
 import { TaxRates, TaxRate, TaxScheme } from '@/types/taxTypes';
