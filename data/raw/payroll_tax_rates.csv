@@ -1,5 +1,5 @@
 "year","rate","min","max","type"
-2022,0.062,0,147000,"socialSecurity"
+2022,0.062,1,147000,"socialSecurity"
 2022,0,147001,999999999999,"socialSecurity"
-2022,0.0145,0,200000,"medicare"
+2022,0.0145,1,200000,"medicare"
 2022,0.0235,200001,999999999999,"medicare"

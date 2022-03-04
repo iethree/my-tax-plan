@@ -28,9 +28,9 @@ export function calculateTax(taxable: number, rates: TaxRate[]): number {
   // calculate tax
   do {
     if (taxable > rates[cnt].max) {
-      tax += rates[cnt].rate * (rates[cnt].max - rates[cnt].min);
+      tax += rates[cnt].rate * (rates[cnt].max - (rates[cnt].min - 1));
     } else if (taxable >= rates[cnt].min) {
-      tax += rates[cnt].rate * (taxable - rates[cnt].min);
+      tax += rates[cnt].rate * (taxable - (rates[cnt].min - 1));
       break;
     }
     cnt++;

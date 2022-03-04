@@ -3,7 +3,7 @@
     "single": [
       {
         "rate": 0.1,
-        "min": 0,
+        "min": 1,
         "max": 10275
       },
       {
@@ -40,7 +40,7 @@
     "marriedFilingJointly": [
       {
         "rate": 0.1,
-        "min": 0,
+        "min": 1,
         "max": 20550
       },
       {
@@ -77,7 +77,7 @@
     "marriedFilingSeparately": [
       {
         "rate": 0.1,
-        "min": 0,
+        "min": 1,
         "max": 10275
       },
       {
@@ -114,7 +114,7 @@
     "headOfHousehold": [
       {
         "rate": 0.1,
-        "min": 0,
+        "min": 1,
         "max": 14650
       },
       {

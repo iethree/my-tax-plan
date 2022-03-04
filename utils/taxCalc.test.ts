@@ -28,7 +28,7 @@ const actualScheme: TaxScheme = defaultRates;
 const myIncomes: IncomeBracket[] = income;
 
 const simpleRates: TaxRate[] = [
-  { rate: 0.1, min: 0, max: 10000 },
+  { rate: 0.1, min: 1, max: 10000 },
   { rate: 0.2, min: 10001, max: 50000 },
   { rate: 0.3, min: 50001, max: 100000000000000 },
 ];
@@ -81,7 +81,7 @@ describe("tax calc tests", () => {
         simpleScheme
       );
 
-      expect(calculatedRevenue).to.equal(100);
+      expect(calculatedRevenue.total).to.equal(100);
     });
 
     it("can calculate multiple brackets", () => {
@@ -107,7 +107,7 @@ describe("tax calc tests", () => {
         simpleScheme
       );
 
-      expect(calculatedRevenue).to.equal(1000 + 8000 + 15000);
+      expect(calculatedRevenue.total).to.equal(1000 + 8000 + 15000);
     });
 
     it("can calculate a population", () => {
@@ -134,9 +134,9 @@ describe("tax calc tests", () => {
       );
 
       assert.approximately(
-        calculatedRevenue,
+        calculatedRevenue.total,
         incomeCategory.qty * (1000 + 8000 + 15000),
-        1
+        2
       );
     });
 
@@ -163,7 +163,7 @@ describe("tax calc tests", () => {
         simpleScheme
       );
 
-      expect(calculatedRevenue).to.equal(7 * incomeCategory.qty);
+      expect(calculatedRevenue.total).to.equal(7 * incomeCategory.qty);
     });
   });
 
@@ -204,7 +204,7 @@ describe("tax calc tests", () => {
         incomeBracket
       );
 
-      expect(calculatedRevenue).to.equal(7 * incomeBracket.qty);
+      expect(calculatedRevenue.total).to.equal(7 * incomeBracket.qty);
     });
   });
 
@@ -236,7 +236,7 @@ describe("tax calc tests", () => {
         const calculatedRevenue: number = calculateSingleBracketRevenue(
           actualSchemeWithoutPayroll,
           thisBracket
-        );
+        ).total;
         const actualRevenue: number =
           thisBracket.all.avgTaxAfterCredits * thisBracket.all.qty;
 
@@ -275,7 +275,7 @@ describe("tax calc tests", () => {
       );
 
       const actualRevenue = myIncomes[0].all.avgTax * myIncomes[0].all.qty;
-      const revenueDiff = calculatedRevenue - actualRevenue;
+      const revenueDiff = calculatedRevenue.total - actualRevenue;
       const variance = Math.round((revenueDiff / actualRevenue) * 1000) / 1000;
 
       // console.log(`actual revenue: ${actualRevenue.toLocaleString()}`);
@@ -290,14 +290,14 @@ describe("tax calc tests", () => {
     const simplePayrollTaxes: PayrollTaxRates = {
       socialSecurity: [
         {
-          min: 0,
+          min: 1,
           max: 1000,
           rate: 0.2,
         },
       ],
       medicare: [
         {
-          min: 0,
+          min: 1,
           max: 2000,
           rate: 0.1,
         },
