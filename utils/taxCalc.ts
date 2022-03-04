@@ -5,6 +5,7 @@ import {
   IncomeCategory,
   IncomeBracket,
   FilingStatus,
+  RevenueDetail,
 } from "@/types/taxTypes";
 
 import incomeJson from "../data/income.json";
@@ -66,7 +67,7 @@ export function calculatePayrollTax(
 export function calculateTaxpayerRevenue(
   income: IncomeCategory,
   rates: TaxScheme
-): number {
+): RevenueDetail {
   const status: FilingStatus | string = income.status;
 
   const gainsRatio: number = income.avgAgi
@@ -103,7 +104,16 @@ export function calculateTaxpayerRevenue(
     rates.payroll
   );
 
-  return incomeTax + gainsTax + income.avgAMT + payrollTax - income.avgCredits;
+  const totalRevenue =
+    incomeTax + gainsTax + income.avgAMT + payrollTax - income.avgCredits;
+
+  return {
+    total: totalRevenue > 0 ? totalRevenue : 0,
+    incomeTax: incomeTax + income.avgAMT > 0 ? incomeTax + income.avgAMT : 0,
+    gainsTax: gainsTax > 0 ? gainsTax : 0,
+    payrollTax: payrollTax > 0 ? payrollTax : 0,
+    credits: income.avgCredits > 0 ? income.avgCredits : 0,
+  };
 }
 
 // calculate tax revenue for a specific taxpayer
@@ -111,12 +121,20 @@ export function calculateSpecificTaxPayerRevenue(
   income: number,
   status: FilingStatus,
   rates: TaxScheme
-): number {
+): RevenueDetail {
   const incomeBracket: IncomeBracket | undefined = actualIncomes.find(
     (bracket) => income < (bracket.maxAgi || 0)
   );
 
-  if (!incomeBracket) return 0;
+  if (!incomeBracket) {
+    return {
+      total: 0,
+      incomeTax: 0,
+      gainsTax: 0,
+      payrollTax: 0,
+      credits: 0,
+    };
+  }
 
   const incomeCategory: IncomeCategory = incomeBracket[status];
 
@@ -155,43 +173,72 @@ export function calculateSpecificTaxPayerRevenue(
   const credits: number = incomeCategory.avgCredits * incomeRatio;
 
   const totalRevenue = incomeTax + gainsTax + amtTax + payrollTax - credits;
-  return totalRevenue > 0 ? totalRevenue : 0;
+
+  const result = {
+    total: Math.round(totalRevenue > 0 ? totalRevenue : 0),
+    incomeTax: Math.round(incomeTax + amtTax > 0 ? incomeTax + amtTax : 0),
+    gainsTax: Math.round(gainsTax > 0 ? gainsTax : 0),
+    payrollTax: Math.round(payrollTax > 0 ? payrollTax : 0),
+    credits: Math.round(credits > 0 ? credits : 0),
+  };
+
+  if (result.total > income) {
+    result.total = income;
+  }
+  return result;
 }
 
 // calculate tax revenue for all taxpayers in this status
 export function calculateStatusRevenue(
   income: IncomeCategory,
   rates: TaxScheme
-): number {
-  const avgTaxpayer: number = calculateTaxpayerRevenue(income, rates);
-  const allTaxpayers: number = avgTaxpayer * income.qty;
+): RevenueDetail {
+  const avgTaxpayer: RevenueDetail = calculateTaxpayerRevenue(income, rates);
+  const allTaxpayers: RevenueDetail = {
+    total: avgTaxpayer.total * income.qty,
+    incomeTax: avgTaxpayer.incomeTax * income.qty,
+    gainsTax: avgTaxpayer.gainsTax * income.qty,
+    payrollTax: avgTaxpayer.payrollTax * income.qty,
+    credits: avgTaxpayer.credits * income.qty,
+  };
 
-  return Math.round(allTaxpayers);
+  return allTaxpayers;
 }
 
 export function calculateSingleBracketRevenue(
   rates: TaxScheme,
   incomeBracket: IncomeBracket
-): number {
-  return Math.round(
-    calculateStatusRevenue(incomeBracket.single, rates) +
-      calculateStatusRevenue(incomeBracket.marriedFilingJointly, rates) +
-      calculateStatusRevenue(incomeBracket.marriedFilingSeparately, rates) +
-      calculateStatusRevenue(incomeBracket.headOfHousehold, rates)
-  );
+): RevenueDetail {
+  return addRevenueDetails([
+    calculateStatusRevenue(incomeBracket.single, rates),
+    calculateStatusRevenue(incomeBracket.marriedFilingJointly, rates),
+    calculateStatusRevenue(incomeBracket.marriedFilingSeparately, rates),
+    calculateStatusRevenue(incomeBracket.headOfHousehold, rates),
+  ]);
 }
 
 export function calculateAllBracketsRevenue(
   rates: TaxScheme,
   incomes: IncomeBracket[] = actualIncomes
-): number {
+): RevenueDetail {
+  const startingRevenue = {
+    total: 0,
+    incomeTax: 0,
+    gainsTax: 0,
+    payrollTax: 0,
+    credits: 0,
+  };
   const totalRevenue = incomes.reduce(
-    (acc: number, curr: IncomeBracket) =>
-      acc + calculateSingleBracketRevenue(rates, curr),
-    0
+    (acc: RevenueDetail, curr: IncomeBracket) =>
+      addRevenueDetails([acc, calculateSingleBracketRevenue(rates, curr)]),
+    startingRevenue
   );
 
-  return totalRevenue > 0 ? totalRevenue : 0;
+  if (totalRevenue.total < 0) {
+    totalRevenue.total = 0;
+  }
+
+  return totalRevenue;
 }
 
 // filter incomes by average taxable single income
@@ -208,8 +255,16 @@ function filterIncomesOver(
 export function calculateTaxRevenue(
   rates: TaxScheme,
   maxIncome = null
-): number {
+): RevenueDetail {
   const incomes = filterIncomesOver(actualIncomes, maxIncome || 99999999999);
 
   return calculateAllBracketsRevenue(rates, incomes);
 }
+
+export const addRevenueDetails = (revenue: RevenueDetail[]): RevenueDetail => ({
+  total: revenue.reduce((acc, curr) => acc + curr.total, 0),
+  incomeTax: revenue.reduce((acc, curr) => acc + curr.incomeTax, 0),
+  gainsTax: revenue.reduce((acc, curr) => acc + curr.gainsTax, 0),
+  payrollTax: revenue.reduce((acc, curr) => acc + curr.payrollTax, 0),
+  credits: revenue.reduce((acc, curr) => acc + curr.credits, 0),
+});

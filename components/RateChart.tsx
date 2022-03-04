@@ -30,6 +30,8 @@ export default function BracketChart({
   rates: TaxScheme;
   setRates?: (rates: TaxScheme) => void;
 }) {
+  const revenue = calculateTaxRevenue(rates);
+
   const adjust = (bracketIndex: number, amount: number) => {
     const newRates = { ...rates };
     Object.keys(newRates.income).forEach((filingStatus) => {
@@ -87,9 +89,9 @@ export default function BracketChart({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="h-[70vh] md:h-auto md:flex-1 relative">
+      <div className="h-[70vh] lg:h-auto lg:flex-1 relative">
         <div className="absolute top-0 left-0 mt-10 ml-5">
-          <ResultWidget revenue={calculateTaxRevenue(rates)} />
+          <ResultWidget revenue={revenue.total} />
         </div>
         <ResponsiveContainer height="100%">
           <ComposedChart data={rates.income.single}>
@@ -108,8 +110,8 @@ export default function BracketChart({
               <Label value="Income" position="bottom" fill={colors.white} />
             </XAxis>
             <Tooltip
-              formatter={(value: number, label: "revenue" | "rate") =>
-                formatters[label](value)
+              formatter={(value: number, label: string) =>
+                formatters[label.includes("rate") ? "rate" : "revenue"](value)
               }
               labelStyle={{ color: colors.black }}
               labelFormatter={(value: number) =>
@@ -119,17 +121,44 @@ export default function BracketChart({
             <Area
               type="natural"
               yAxisId="right"
-              name="revenue"
+              stackId="revenue"
+              name="payroll taxes"
               strokeWidth={3}
-              dataKey={(data) => calculateTaxRevenue(rates, data.max)}
+              dataKey={(data) =>
+                calculateTaxRevenue(rates, data.max).payrollTax
+              }
+              stroke={colors.yellow[600]}
+              fill={colors.yellow[700]}
+              fillOpacity={0.4}
+              connectNulls={true}
+            />
+            <Area
+              type="natural"
+              yAxisId="right"
+              stackId="revenue"
+              name="income taxes"
+              strokeWidth={3}
+              dataKey={(data) => calculateTaxRevenue(rates, data.max).incomeTax}
               stroke={colors.emerald[600]}
               fill={colors.emerald[700]}
+              fillOpacity={0.4}
+              connectNulls={true}
+            />
+            <Area
+              type="natural"
+              yAxisId="right"
+              stackId="revenue"
+              name="capital gains taxes"
+              strokeWidth={3}
+              dataKey={(data) => calculateTaxRevenue(rates, data.max).gainsTax}
+              stroke={colors.red[600]}
+              fill={colors.red[700]}
               fillOpacity={0.4}
               connectNulls={true}
             >
               <LabelList
                 position="top"
-                fill={colors.green[300]}
+                fill={colors.red[300]}
                 z={90000}
                 formatter={(value: number) => formatBigMoney(value)}
               />
@@ -137,6 +166,7 @@ export default function BracketChart({
             <Bar
               dataKey="rate"
               yAxisId="left"
+              name="income tax rate"
               stroke={colors.emerald[800]}
               fill={colors.emerald[500]}
               fillOpacity={0.9}
