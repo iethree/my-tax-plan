@@ -105,11 +105,11 @@ export function calculateTaxpayerRevenue(
   );
 
   const totalRevenue =
-    incomeTax + gainsTax + income.avgAMT + payrollTax - income.avgCredits;
+    incomeTax + gainsTax + payrollTax + income.avgAMT - income.avgCredits;
 
   return {
-    total: totalRevenue > 0 ? totalRevenue : 0,
-    incomeTax: incomeTax + income.avgAMT > 0 ? incomeTax + income.avgAMT : 0,
+    total: totalRevenue - income.avgAMT > 0 ? totalRevenue : 0,
+    incomeTax: incomeTax > 0 ? incomeTax : 0,
     gainsTax: gainsTax > 0 ? gainsTax : 0,
     payrollTax: payrollTax > 0 ? payrollTax : 0,
     credits: income.avgCredits > 0 ? income.avgCredits : 0,
