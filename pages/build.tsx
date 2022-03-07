@@ -39,7 +39,7 @@ const Builder: NextPage = () => {
               </button>
               {currentPlan.created_at && (
                 <CopyButton
-                  content={`Check out my tax Plan: ${currentPlan.title}\n${
+                  content={`Check out my tax plan: ${currentPlan.title}\n${
                     window.location.origin
                   }/view/${encode(currentPlan.id)}`}
                   className="button small green m-1"
