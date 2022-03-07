@@ -76,3 +76,10 @@ export interface IncomeBracket {
   marriedFilingSeparately: IncomeCategory;
   headOfHousehold: IncomeCategory;
 }
+
+export type IncomeClass =
+  | "working"
+  | "middle"
+  | "upper"
+  | "top 1%"
+  | "top 0.1%";
