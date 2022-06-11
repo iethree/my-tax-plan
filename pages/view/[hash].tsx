@@ -13,6 +13,7 @@ import Meta from "@/layout/Meta";
 
 import type { AlertMessage } from "@/types/appTypes";
 import Alert from "@/components/Alert";
+import { getDeficitEffect } from "@/utils/planDescription";
 
 const Viewer: NextPage = () => {
   const [plan, setPlan] = useState<TaxPlan | null>(null);
@@ -63,6 +64,7 @@ const Viewer: NextPage = () => {
       </Head>
       <div className="p-3 mx-auto text-center w-full md:max-h-[calc(100vh-100px)] overflow-hidden flex flex-col relative">
         <h2 className="text-yellow-500 text-center">{plan.title}</h2>
+        <div>{getDeficitEffect(plan.scheme)}</div>
         <div className="block md:flex overflow-hidden justify-around min-content">
           <div className="flex flex-col w-full md:w-1/2 2xl:w-1/2 ">
             <RateChart rates={plan.scheme} />

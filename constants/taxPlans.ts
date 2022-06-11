@@ -18,3 +18,26 @@ export const newPlan = () =>
       created_at: "",
     })
   );
+
+export const classThresholds = {
+  working: {
+    min: 0,
+    max: 35000,
+  },
+  middle: {
+    min: 35001,
+    max: 120000,
+  },
+  upper: {
+    min: 120001,
+    max: 600000,
+  },
+  "top 1%": {
+    min: 600001,
+    max: 3200000,
+  },
+  "top 0.1%": {
+    min: 3200001,
+    max: Infinity,
+  },
+};

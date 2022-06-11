@@ -17,7 +17,7 @@ const Methodology: NextPage = () => {
           Everyone agrees that our tax code is too complex. Few agree on how it
           should be simplified. It's the product of many years of political and
           bureaucratic processes, and as such, it is full of handouts to special
-          interests, loopholes, and inconsistencies that make the whole things
+          interests, loopholes, and inconsistencies that make the whole thing
           difficult to understand and even more difficult to fix. Simplifying or
           fundamentally changing how we tax individuals is a very worthwhile
           project, but beyond the scope of this web application (for now).

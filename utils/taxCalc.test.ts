@@ -7,14 +7,14 @@ import {
   PayrollTaxRates,
   IncomeCategory,
   IncomeBracket,
-} from "../types/taxTypes";
+} from "@/types/taxTypes";
 
 import {
   calculatePayrollTax,
   calculateStatusRevenue,
   calculateAllBracketsRevenue,
   calculateSingleBracketRevenue,
-} from "./taxCalc";
+} from "../utils/taxCalc";
 
 import defaultRates from "../data/rates.json";
 import income from "../data/income.json";

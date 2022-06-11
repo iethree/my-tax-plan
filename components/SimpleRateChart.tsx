@@ -4,17 +4,10 @@ import {
   XAxis,
   YAxis,
   Area,
-  Tooltip,
 } from "recharts";
 import { TaxScheme } from "@/types/taxTypes";
 import colors from "tailwindcss/colors";
 import { calculateTaxRevenue } from "@/utils/taxCalc";
-import { formatBigMoney, formatPercent } from "@/utils/formatters";
-
-const formatters = {
-  revenue: formatBigMoney,
-  rate: formatPercent,
-};
 
 export default function BracketChart({ rates }: { rates: TaxScheme }) {
   if (!rates) {
@@ -25,11 +18,7 @@ export default function BracketChart({ rates }: { rates: TaxScheme }) {
     <ResponsiveContainer height="100%">
       <ComposedChart data={rates.income.single}>
         <YAxis yAxisId="right" orientation="right" hide />
-        <XAxis
-          dataKey="min"
-          tickFormatter={(value: number) => `> ${formatBigMoney(value)}`}
-          hide
-        />
+        <XAxis dataKey="min" hide />
         <Area
           type="natural"
           yAxisId="right"
